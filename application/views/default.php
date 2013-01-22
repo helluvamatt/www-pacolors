@@ -37,6 +37,7 @@
           <a class="brand" href="/">ParanoidAndroid Colors</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
+			  <li <?php if ($active == 'applications') echo "class=\"active\""; ?>><a href="/applications">Applications</a></li>
               <li <?php if ($active == 'colors') echo "class=\"active\""; ?>><a href="/colors">Colors</a></li>
               <li <?php if ($active == 'users') echo "class=\"active\""; ?>><a href="/users">Users</a></li>
               <li><a href="http://www.paranoidandroid.com">Parandoid Android</a></li>
