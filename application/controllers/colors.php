@@ -6,14 +6,14 @@ class Colors extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('color');
+		$this->load->model('color_model');
 		$this->data['title'] = "";
 		$this->data['active'] = "colors";
 	}
 	
 	public function index()
 	{
-		$this->page_data['color_list'] = $this->color->get_list();
+		$this->page_data['color_list'] = $this->color_model->get_list();
 		$this->render_page('colors/list', $this->page_data);
 	}
 	
@@ -35,7 +35,7 @@ class Colors extends MY_Controller
 		if ($id > 0)
 		{
 			$this->page_data['title'] = "Edit Color Setting";
-			$this->page_data['color'] = $this->color->get_color($id);
+			$this->page_data['color'] = $this->color_model->get_color($id);
 		}
 		else
 		{
@@ -48,7 +48,7 @@ class Colors extends MY_Controller
 	public function view($id)
 	{
 		$this->page_data['title'] = "View Color Details";
-		$this->page_data['color'] = $this->color->get_color($id);
+		$this->page_data['color'] = $this->color_model->get_color($id);
 		if (isset($this->page_data['color']))
 		{
 			$this->render_page('colors/view', $this->page_data);
