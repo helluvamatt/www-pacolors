@@ -1,4 +1,3 @@
-<!-- Template Start -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,7 +13,7 @@
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -22,7 +21,7 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
   </head>
 
   <body>
@@ -37,7 +36,7 @@
           <a class="brand" href="/">ParanoidAndroid Colors</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-			  <li <?php if ($active == 'applications') echo "class=\"active\""; ?>><a href="/applications">Applications</a></li>
+              <li <?php if ($active == 'applications') echo "class=\"active\""; ?>><a href="/applications">Applications</a></li>
               <li <?php if ($active == 'colors') echo "class=\"active\""; ?>><a href="/colors">Colors</a></li>
               <li <?php if ($active == 'users') echo "class=\"active\""; ?>><a href="/users">Users</a></li>
               <li><a href="http://www.paranoidandroid.com">Parandoid Android</a></li>
@@ -56,9 +55,8 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
 
   </body>
 </html>
-<!-- Template End -->

@@ -7,19 +7,24 @@ class Colors extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->model('color_model');
-		$this->data['title'] = "";
+		$this->title = "";
 		$this->data['active'] = "colors";
 	}
 	
 	public function index()
 	{
-		$this->page_data['color_list'] = $this->color_model->get_list();
-		$this->render_page('colors/list', $this->page_data);
+		$page_data['color_list'] = $this->color_model->get_list();
+		$this->render_page('colors/list', $page_data);
 	}
 	
 	public function edit($id = 0)
 	{
 		$this->load->library('form_validation');
+		$this->load->helper('form');
+		$page_data = array();
+		
+		// Get list of color types
+		$page_data['color_types'] = $this->color_model->get_color_types();
 		
 		// TODO Validation rules
 		
@@ -34,32 +39,56 @@ class Colors extends MY_Controller
 		
 		if ($id > 0)
 		{
-			$this->page_data['title'] = "Edit Color Setting";
-			$this->page_data['color'] = $this->color_model->get_color($id);
+			$this->title = "Edit Color Setting";
+			$page_data['color'] = $this->color_model->get_color($id);
 		}
 		else
 		{
-			$this->page_data['title'] = "Add Color Setting";
+			$this->title = "Add Color Setting";
 		}
 		
-		$this->render_page('colors/edit', $this->page_data);
+		$this->render_page('colors/edit', $page_data);
 	}
 	
 	public function view($id)
 	{
-		$this->page_data['title'] = "View Color Details";
-		$this->page_data['color'] = $this->color_model->get_color($id);
-		if (isset($this->page_data['color']))
+		$this->title = "View Color Details";
+		$page_data['color'] = $this->color_model->get_setting($id);
+		if (isset($page_data['color']))
 		{
-			$this->render_page('colors/view', $this->page_data);
+			$this->render_page('colors/view', $page_data);
 		}
 		else
 		{
-			$this->page_data['error_title'] = "Color Setting Not Found";
-			$this->page_data['error_message'] = "That color setting was not found.";
-			$this->render_page('error', $this->page_data);
+			$page_data['error_title'] = "Color Setting Not Found";
+			$page_data['error_message'] = "That color setting was not found.";
+			$this->render_page('error', $page_data);
 		}
 		
+	}
+	
+	public function render($id)
+	{
+		$color = $this->color_model->get_setting($id);
+		
+		$image = new Imagick();
+		$image->newImage(320, 240, new ImagickPixel('none'));
+		$image->setImageFormat('png');
+		
+		
+		if (isset($color))
+		{
+			
+		}
+		else
+		{
+			$filename = BASEPATH . "../www/assets/img/error.png";
+		}
+		
+		header('Content-Type: image/png');
+		echo $image;
+		die();
+		exit;
 	}
 	
 	public function paprefs()

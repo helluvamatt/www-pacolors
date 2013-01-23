@@ -1,24 +1,24 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require 'db_model.php';
+require_once 'db_model.php';
 
 class Application_model extends DB_Model
 {
 	public function get_application_by_id($id)
 	{
-		return get_application(array('id' => $id, 'enabled' => 'true'));
+		return $this->get_application(array('id' => $id, 'enabled' => 'true'));
 	}
 	
 	public function get_application_by_package($package)
 	{
-		return get_application(array('package_name' => $package, 'enabled' => 'true'));
+		return $this->get_application(array('package_name' => $package, 'enabled' => 'true'));
 	}
 	
 	public function get_list($count = -1, $start = 0)
 	{
 		$start = filter_var($start, FILTER_SANITIZE_NUMBER_INT);
 		$count = filter_var($count, FILTER_SANITIZE_NUMBER_INT);
-		$sql = 'SELECT id, package_name, display_name FROM applications ORDER BY display_name';
+		$sql = 'SELECT apps.id, apps.package_name, apps.display_name, count(cs.id) AS cs_count FROM applications AS apps LEFT JOIN colors AS cs ON cs.appid = apps.id GROUP BY apps.id ORDER BY apps.display_name';
 		if ($count > 0)
 		{
 			$sql .= 'LIMIT ' . $count . ' OFFSET ' . $start;

@@ -20,7 +20,7 @@ drop sequence if exists users_id_seq;
 -- User table
 create sequence users_id_seq;
 create table users (
-	id integer not null primary key default nextval('users_id_seq'),
+	id integer primary key default nextval('users_id_seq'),
 	username character varying(64) unique not null,
 	email character varying(255) not null,
 	realname_first character varying(255) default null,
@@ -34,49 +34,81 @@ alter sequence users_id_seq owned by users.id;
 -- Application table
 create sequence applications_id_seq;
 create table applications (
-	id integer not null primary key default nextval('applications_id_seq'),
+	id integer primary key default nextval('applications_id_seq'),
 	package_name character varying(255) not null unique,
 	display_name character varying(255) not null,
 	enabled boolean not null default true
 );
 alter sequence applications_id_seq owned by applications.id;
 
--- Color settings
-create sequence color_settings_id_seq;
-create table color_settings (
-	id integer not null primary key default nextval('color_settings_id_seq'),
-	userid integer not null references users,
-	appid integer not null references applications,
-	enabled boolean not null default true
-);
-alter sequence color_settings_id_seq owned by color_settings.id;
-
--- Color types table
-create sequence color_types_id_seq;
-create table color_types (
-	id integer not null primary key default nextval('color_types_id_seq'),
-	props_order integer not null unique,
-	display_name character varying(255),
-	enabled boolean default true
-);
-alter sequence color_types_id_seq owned by color_types.id;
-
 -- Colors table
 create sequence colors_id_seq;
 create table colors (
-	id integer not null primary key default nextval('colors_id_seq'),
-	settingid integer not null references color_settings,
-	color_type integer not null references color_types,
-	color integer not null
+	id integer primary key default nextval('colors_id_seq'),
+	userid integer references users,
+	appid integer not null references applications,
+	color_navbar_bg integer not null,
+	color_navbar_fg integer not null,
+	color_navbar_gl integer not null,
+	color_status_bg integer not null,
+	color_status_fg integer not null,
+	enabled boolean not null default true
 );
 alter sequence colors_id_seq owned by colors.id;
 
 -- Votes table
 create sequence votes_id_seq;
 create table votes (
-	id integer not null primary key default nextval('votes_id_seq'),
+	id integer primary key default nextval('votes_id_seq'),
 	userid integer not null references users,
-	settingid integer not null references color_settings,
+	colorid integer not null references colors,
 	enabled boolean not null default true
 );
 alter sequence votes_id_seq owned by votes.id;
+
+-- Example applications
+insert into applications
+	(package_name, display_name)
+values
+	('com.facebook.katana', 'Facebook'),
+	('com.spotify.mobile.android.ui', 'Spotify Mobile'),
+	('com.dropbox.android', 'Dropbox'),
+	('com.skype.raider', 'Skype');
+
+-- Example color settings
+insert into colors
+	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg)
+values
+	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int),
+	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int),
+	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int),
+	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int),
+	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
