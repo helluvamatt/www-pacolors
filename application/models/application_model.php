@@ -2,6 +2,8 @@
 
 require_once 'db_model.php';
 
+define('SQL_TABLE_APPS', '');
+
 class Application_model extends DB_Model
 {
 	public function get_application_by_id($id)

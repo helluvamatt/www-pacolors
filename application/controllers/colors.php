@@ -70,25 +70,56 @@ class Colors extends MY_Controller
 	public function render($id)
 	{
 		$color = $this->color_model->get_setting($id);
-		
-		$image = new Imagick();
-		$image->newImage(320, 240, new ImagickPixel('none'));
-		$image->setImageFormat('png');
-		
-		
 		if (isset($color))
 		{
+			$image = imagecreatefrompng('');
+			imagesavealpha($image, true);
 			
+			
+			
+			header('Content-Type: image/png');
+			imagepng($image);
+			imagedestroy($image);
 		}
 		else
 		{
-			$filename = BASEPATH . "../www/assets/img/error.png";
+			header('HTTP/1.0 404 Not Found');
 		}
-		
-		header('Content-Type: image/png');
-		echo $image;
 		die();
 		exit;
+	}
+	
+	public function test_color_model()
+	{
+		echo "<pre>\n";
+		
+		// Color model
+		echo "Testing Color_model...\n";
+		
+		// No tests
+		echo "   No tests.\n";
+		
+		// Color_Object
+		echo "Testing Color_Object...\n";
+		
+		$color_str = "#AF92A59B";
+		var_dump($color_str);
+		
+		$color = Color_Object::parse_color_string($color_str);
+		var_dump($color);
+		
+		$comp = Color_Object::components($color, true);
+		var_dump($comp);
+		
+		$back_to_color = Color_Object::build_color($comp['r'], $comp['g'], $comp['b'], $comp['a']);
+		var_dump($back_to_color);
+		
+		$back_to_string = Color_Object::format_color_string($back_to_color);
+		var_dump($back_to_string);
+		
+		echo "</pre>\n";
+		
+		echo '<div style="background-color: ' . $back_to_string . '; padding: 5px;">' . $back_to_string . '</div>' . "\n";
 	}
 	
 	public function paprefs()

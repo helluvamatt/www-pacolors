@@ -72,3 +72,8 @@ class DB_Model extends CI_Model
 	}
 }
 
+class DB_Object
+{
+	public $id;
+}
+
