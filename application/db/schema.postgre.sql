@@ -5,15 +5,11 @@
 
 drop table if exists votes;
 drop table if exists colors;
-drop table if exists color_types;
-drop table if exists color_settings;
 drop table if exists applications;
 drop table if exists users;
 
 drop sequence if exists votes_id_seq;
 drop sequence if exists colors_id_seq;
-drop sequence if exists color_types_id_seq;
-drop sequence if exists color_settings_id_seq;
 drop sequence if exists applications_id_seq;
 drop sequence if exists users_id_seq;
 
@@ -47,11 +43,11 @@ create table colors (
 	id integer primary key default nextval('colors_id_seq'),
 	userid integer references users,
 	appid integer not null references applications,
-	color_navbar_bg integer not null,
-	color_navbar_fg integer not null,
-	color_navbar_gl integer not null,
-	color_status_bg integer not null,
-	color_status_fg integer not null,
+	color_navbar_bg integer,
+	color_navbar_fg integer,
+	color_navbar_gl integer,
+	color_status_bg integer,
+	color_status_fg integer,
 	enabled boolean not null default true
 );
 alter sequence colors_id_seq owned by colors.id;
@@ -73,7 +69,8 @@ values
 	('com.facebook.katana', 'Facebook'),
 	('com.spotify.mobile.android.ui', 'Spotify Mobile'),
 	('com.dropbox.android', 'Dropbox'),
-	('com.skype.raider', 'Skype');
+	('com.skype.raider', 'Skype'),
+	('com.android.launcher2', 'Launcher');
 
 -- Example color settings
 insert into colors
@@ -83,7 +80,15 @@ values
 	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int),
 	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int),
 	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int),
-	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int);
+	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int),
+	(5, x'80000000'::int, NULL, NULL, x'FF000000'::int, NULL),
+	(5, x'10000000'::int, NULL, NULL, x'FF000000'::int, NULL);
+
+-- Ensure tables are owned by the application user
+alter table votes owner to "app_pacolors";
+alter table colors owner to "app_pacolors";
+alter table applications owner to "app_pacolors";
+alter table users owner to "app_pacolors";
 
 
 

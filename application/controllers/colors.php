@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+define('TILE_BG', 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGElEQVQYV2N4DwX/oYBhgARgDJjEAAkAAEC99wFuu0VFAAAAAElFTkSuQmCC');
+
 class Colors extends MY_Controller
 {
 	
@@ -72,10 +74,29 @@ class Colors extends MY_Controller
 		$color = $this->color_model->get_setting($id);
 		if (isset($color))
 		{
-			$image = imagecreatefrompng('');
+			$image = imagecreatetruecolor(320, 120);
 			imagesavealpha($image, true);
+		
+			$bg = imagecreatefromstring(base64_decode(TILE_BG));
+			imagesettile($image, $bg);
+			imagefill($image, 0, 0, IMG_COLOR_TILED);
+			
+			//$back_icon = imagecreatefrompng(APPPATH . 'assets/ic_back.png');
+			
+			// Draw status bar with correct color
+			$image_color_status_bg = $this->create_gd_color($image, $color->get_color_status_bg(), 1);
+			imagefilledrectangle($image, 0, 0, 319, 24, $image_color_status_bg);
+			
+			// TODO Draw icons on status bar with correct color
 			
 			
+			// Draw navbar with correct color
+			$image_color_navbar_bg = $this->create_gd_color($image, $color->get_color_navbar_bg(), 2);
+			imagefilledrectangle($image, 0, 71, 319, 119, $image_color_navbar_bg);
+			
+			// TODO Draw nav icons with correct color
+			
+			// TODO Draw touch glow on home icon with correct color
 			
 			header('Content-Type: image/png');
 			imagepng($image);
@@ -87,6 +108,69 @@ class Colors extends MY_Controller
 		}
 		die();
 		exit;
+	}
+	
+	private function create_gd_color($image, $color, $debug_slot = 0)
+	{
+		$comp = Color_Object::components($color, TRUE);
+		return imagecolorallocatealpha($image, $comp['r'], $comp['g'], $comp['b'], Color_Object::alpha_to_gd($comp['a']));
+	}
+	
+	public function integer_test()
+	{
+		echo "<pre>\n";
+		$red = rand(0, 0xFF);
+		$green = rand(0, 0xFF);
+		$blue = rand(0, 0xFF);
+		var_dump(array('r' => $red, 'g' => $green, 'b' => $blue));
+		
+		echo "\n\n";
+		
+		for($i = 0; $i <= 0xFF; $i++)
+		{
+			$this->color_dump(Color_Object::build_color($red, $green, $blue, $i));
+		}
+		
+		echo "</pre>\n";
+	}
+	
+	private function color_dump($color)
+	{
+		$comp = Color_Object::components($color, TRUE);
+		printf("%08X | %02X %02X %02X %02X\n", $color, $comp['a'], $comp['r'], $comp['g'], $comp['b']);
+	}
+	
+	public function test_color($id)
+	{
+		echo "<pre>\n";
+		$color = $this->color_model->get_setting($id);
+		if (isset($color))
+		{
+			echo "Navbar BG:\n";
+			$comp = Color_Object::components($color->color_navbar_bg, true);
+			var_dump($comp);
+			
+			echo "Navbar FG:\n";
+			$comp1 = Color_Object::components($color->color_navbar_fg, true);
+			var_dump($comp1);
+			
+			echo "Navbar Glow:\n";
+			$comp2 = Color_Object::components($color->color_navbar_gl, true);
+			var_dump($comp2);
+			
+			echo "Statusbar BG:\n";
+			$comp3 = Color_Object::components($color->color_status_bg, true);
+			var_dump($comp3);
+			
+			echo "Statusbar FG:\n";
+			$comp4 = Color_Object::components($color->color_status_fg, true);
+			var_dump($comp4);
+		}
+		else
+		{
+			echo "Not found.\n";
+		}
+		echo "</pre>\n";
 	}
 	
 	public function test_color_model()
