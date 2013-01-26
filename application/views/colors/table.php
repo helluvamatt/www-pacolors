@@ -5,7 +5,8 @@ if (isset($color_list) && count($color_list) > 0)
 <!-- Color List Start -->
 <table class="table table-striped table-bordered">
 	<tr>
-		<th>Color</th>
+		<th>Preview</th>
+		<th>Color Settings</th>
 <?php if (!isset($hide_app_col)): ?>
 		<th>Application</th>
 <?php endif; ?>
@@ -20,7 +21,14 @@ if (isset($color_list) && count($color_list) > 0)
 	<tr>
 		<td>
 			<!-- Color Rendering / Hex Code -->
-			<img src="/render/preview/<?php echo $color->id; ?>" alt="Preview" title="Preview" />
+			<img src="/render/preview/<?php echo $color->id; ?>" alt="Preview" title="Preview" class="preview-img" />
+		</td>
+		<td>
+			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_bg()); ?></p>
+			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_fg()); ?></p>
+			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Glow:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_gl()); ?></p>
+			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_bg()); ?></p>
+			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_fg()); ?></p>
 		</td>
 <?php if (!isset($hide_app_col)): ?>
 		<td>

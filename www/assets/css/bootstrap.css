@@ -1978,7 +1978,7 @@ table {
 }
 
 .table {
-  width: 100%;
+  /* width: 100%; */ /* CUSTOM DISABLED */
   margin-bottom: 20px;
 }
 

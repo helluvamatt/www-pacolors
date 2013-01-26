@@ -52,7 +52,7 @@ class Color_Object extends DB_Object
 	
 	public static function format_color_string($color)
 	{
-		return '#' . dechex($color);
+		return sprintf('#%08X', $color);
 	}
 	
 	public static function parse_color_string($color_str)

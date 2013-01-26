@@ -19,6 +19,22 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+	
+	<!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the beginning, because placing at the end is a fucking stupid idea -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+<?php foreach ($extra_js as $name => $js): ?>
+	<script type="text/javascript">
+		<?php echo "//" . $name; ?>
+		<?php echo $js; ?>
+	</script>
+<?php endforeach; ?>
+<?php foreach ($extra_js_file as $name => $js_file): ?>
+<?php if ($js_file[0] != '/') $js_file = "/assets/js/" . $js_file; ?>
+	<script type="text/javascript" src="<?php echo $js_file; ?>"></script>
+<?php endforeach; ?>
 
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="/assets/ico/favicon.png">
@@ -51,12 +67,5 @@
 <?php echo $content; ?>
 
     </div> <!-- /container -->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-
   </body>
 </html>
