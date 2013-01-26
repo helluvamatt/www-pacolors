@@ -20,7 +20,7 @@ if (isset($color_list) && count($color_list) > 0)
 	<tr>
 		<td>
 			<!-- Color Rendering / Hex Code -->
-			<img src="/colors/render/<?php echo $color->id; ?>" alt="Preview" title="Preview" />
+			<img src="/render/preview/<?php echo $color->id; ?>" alt="Preview" title="Preview" />
 		</td>
 <?php if (!isset($hide_app_col)): ?>
 		<td>
