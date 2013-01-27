@@ -16,7 +16,7 @@ echo form_hidden('color_status_fg', Color_Object::format_color_string($color->ge
 
 	<div class="row">
 		<div class="span8" style="position:relative;" id="preview_container">
-			<img src="/render/live" alt="preview" id="preview_img" />
+			<img src="<?php echo site_url('render/live'); ?>" alt="preview" id="preview_img" />
 			<a href="javascript:;" class="btn btn-mini autohide" style="position:absolute;top:12px;left:12px;"   data-param="status_bg" title="Status Bar Background"><i class="icon-tint"></i></a>
 			<a href="javascript:;" class="btn btn-mini autohide" style="position:absolute;top:12px;left:560px;"  data-param="status_fg" title="Status Bar Foreground"><i class="icon-tint"></i></a>
 			<a href="javascript:;" class="btn btn-mini autohide" style="position:absolute;top:188px;left:12px;"  data-param="navbar_bg" title="Navbar Background "><i class="icon-tint"></i></a>
@@ -37,7 +37,7 @@ echo form_hidden('color_status_fg', Color_Object::format_color_string($color->ge
 		<a href="/colors" class="btn">Cancel</a>
 	</div>
 </form>
-<script type="text/javascript" src="/assets/js/jpicker-1.1.6.custom.js"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/jpicker-1.1.6.custom.js'); ?>"></script>
 <script type="text/javascript">
 function get_color_rgba(param)
 {
@@ -66,7 +66,7 @@ function change() {
 	var navbar_gl = get_color('navbar_gl');
 	var status_bg = get_color('status_bg');
 	var status_fg = get_color('status_fg');
-	var img = '/render/live?navbar_bg=' + navbar_bg + '&navbar_fg=' + navbar_fg + '&navbar_gl=' + navbar_gl + '&status_bg=' + status_bg + '&status_fg=' + status_fg;
+	var img = '<?php echo site_url('render/live'); ?>?navbar_bg=' + navbar_bg + '&navbar_fg=' + navbar_fg + '&navbar_gl=' + navbar_gl + '&status_bg=' + status_bg + '&status_fg=' + status_fg;
 	$('#preview_img').attr('src', img);
 };
 
@@ -110,7 +110,7 @@ $(function() {
 					new $.jPicker.Color()
 				]
 			},
-			images: {clientPath: '/assets/img/'}
+			images: {clientPath: "<?php echo base_url('assets/img'); ?>/"}
 		}, function(color, context) {
 			var c = rgba_to_render(color.val('ahex'));
 			console.log('setting "' + param + '" to "' + c + '"');
