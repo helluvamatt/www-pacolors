@@ -7,3 +7,51 @@ body
 {
 	display: none;
 }
+
+/* jPicker overrides */
+table.jPicker
+{
+	width: 587px;
+}
+
+.jPicker td
+{
+	vertical-align: top;
+}
+
+.jPicker div.Bar
+{
+	margin-top: 48px;
+}
+
+.jPicker td.Radio
+{
+	width: 43px;
+}
+
+.jPicker td.Text
+{
+	width: 80px;
+}
+
+.jPicker tr.Hex td.Text
+{
+	width: 142px;
+	vertical-align: middle;
+}
+
+/* Bootstrap Overrides (It can't be perfect) */
+.navbar-fixed-top, .navbar-fixed-bottom
+{
+	z-index: 19;
+}
+
+.table
+{
+	width: auto;
+}
+
+label
+{
+	display: inline;
+}

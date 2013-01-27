@@ -8,12 +8,9 @@
 
     <!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/jPicker-1.1.6.css" />
+	<link href="/assets/css/app.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -49,7 +46,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">ParanoidAndroid Colors</a>
+          <a class="brand" href="/">PAcolors</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li <?php if ($active == 'applications') echo "class=\"active\""; ?>><a href="/applications">Applications</a></li>
