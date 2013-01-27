@@ -50,9 +50,9 @@ class Color_Object extends DB_Object
 	public function get_color_status_bg() {return isset($this->color_status_bg) ? $this->color_status_bg : DEFAULT_COLOR_STATUS_BG;}
 	public function get_color_status_fg() {return isset($this->color_status_fg) ? $this->color_status_fg : DEFAULT_COLOR_STATUS_FG;}
 	
-	public static function format_color_string($color)
+	public static function format_color_string($color, $include_hash = TRUE)
 	{
-		return sprintf('#%08X', $color);
+		return ( ($include_hash ? '#' : '') . sprintf('%08X', $color) );
 	}
 	
 	public static function parse_color_string($color_str)

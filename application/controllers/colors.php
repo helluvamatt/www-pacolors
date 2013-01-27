@@ -21,35 +21,45 @@ class Colors extends MY_Controller
 	
 	public function edit($id = 0)
 	{
-		$this->load->library('form_validation');
 		$this->load->helper('form');
 		$page_data = array();
-		
-		// Get list of color types
-		$page_data['color_types'] = $this->color_model->get_color_types();
-		
-		// TODO Validation rules
-		
-		if ($this->form_validation->run())
-		{
-			// TODO Save to database
-		}
-		else
-		{
-			// TODO Error?
-		}
 		
 		if ($id > 0)
 		{
 			$this->title = "Edit Color Setting";
-			$page_data['color'] = $this->color_model->get_color($id);
+			$page_data['color'] = $this->color_model->get_setting($id);
 		}
 		else
 		{
 			$this->title = "Add Color Setting";
+			$page_data['color'] = new Color_Object();
 		}
 		
 		$this->render_page('colors/edit', $page_data);
+	}
+	
+	public function save()
+	{
+		$this->load->library('form_validation');
+		$this->load->helper('url');
+	
+		// Validation rules
+		$this->form_validation->set_rules('color_navbar_bg', '', 'required');
+		$this->form_validation->set_rules('color_navbar_fg', '', 'required');
+		$this->form_validation->set_rules('color_navbar_gl', '', 'required');
+		$this->form_validation->set_rules('color_status_bg', '', 'required');
+		$this->form_validation->set_rules('color_status_fg', '', 'required');
+		
+		if ($this->form_validation->run())
+		{
+			// TODO Save to database
+			echo "<pre>\n";
+			var_dump($_POST);
+			echo "</pre>\n";
+		}
+		
+		$id = $_POST['id'];
+		redirect('/colors/edit/' . $id);
 	}
 	
 	public function view($id)

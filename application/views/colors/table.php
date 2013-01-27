@@ -40,7 +40,11 @@ if (isset($color_list) && count($color_list) > 0)
 			<!-- User Name -->
 			<?php echo isset($color->username) ? $color->username : "<i>None</i>"; ?>
 		</td>
-		<td><!-- Tools Buttons --></td>
+		<td>
+			<!-- Tools Buttons -->
+			<p><a href="/colors/edit/<?php echo $color->id; ?>" class="btn"><i class="icon-edit"></i>&nbsp;Edit</a><p>
+			<p><a href="/colors/delete/<?php echo $color->id; ?>" class="btn btn-danger"><i class="icon-trash icon-white"></i>&nbsp;Delete</a>
+		</td>
 	</tr>
 <!-- Color End->
 <?php
