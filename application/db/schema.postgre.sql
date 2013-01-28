@@ -6,18 +6,16 @@
 drop table if exists votes;
 drop table if exists colors;
 drop table if exists applications;
+drop table if exists ci_sessions;
+drop table if exists permissions_map;
+drop table if exists permissions;
 drop table if exists users;
-
-drop sequence if exists votes_id_seq;
-drop sequence if exists colors_id_seq;
-drop sequence if exists applications_id_seq;
-drop sequence if exists users_id_seq;
 
 -- User table
 create sequence users_id_seq;
 create table users (
 	id integer primary key default nextval('users_id_seq'),
-	username character varying(64) unique not null,
+	username character varying(64) not null unique,
 	email character varying(255) not null,
 	realname_first character varying(255) default null,
 	realname_last character varying(255) default null,
@@ -26,6 +24,43 @@ create table users (
 	enabled boolean default true
 );
 alter sequence users_id_seq owned by users.id;
+
+-- Permissions table
+create sequence permissions_id_seq;
+create table permissions (
+	id integer primary key default nextval('permissions_id_seq'),
+	permissionname character varying(64) unique not null
+);
+alter sequence permissions_id_seq owned by permissions.id;
+
+-- System permissions
+insert into permissions
+	(permissionname)
+values
+	('sys.users.manage'),		-- Create, update, delete user accounts
+	('sys.colors.add'),		-- Create new color settings, disable color settings owned by self
+	('sys.colors.moderate'),	-- Disable color settings by other users (including anonymous users)
+	('sys.colors.manage'),		-- Disable and re-enable color settings by other users (including anonymous users)
+	('sys.applications.add'),	-- Create new application records
+	('sys.applications.moderate'),	-- Disable applications records (any user)
+	('sys.applications.manage'); 	-- Disable and re-enable application records (any user)
+
+-- Role map
+create table permissions_map (
+	permissionid integer references permissions (id),
+	userid integer references users (id),
+	primary key (permissionid, userid)
+);
+
+-- CodeIgniter Session table
+create table ci_sessions (
+	session_id character varying(40) primary key default '0',
+	ip_address character varying(45) default '0' not null,
+	user_agent character varying(120) not null,
+	last_activity numeric(10) default 0 not null,
+	user_data text not null
+);
+create index last_activity_idx on ci_sessions (last_activity);
 
 -- Application table
 create sequence applications_id_seq;
