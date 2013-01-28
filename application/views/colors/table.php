@@ -7,10 +7,12 @@ if (isset($color_list) && count($color_list) > 0)
 	<tr>
 		<th>Preview</th>
 		<th>Color Settings</th>
-<?php if (!isset($hide_app_col)): ?>
+<?php if (!isset($hide_app_col) || !$hide_app_col): ?>
 		<th>Application</th>
 <?php endif; ?>
+<?php if (!isset($hide_user_col) || !$hide_user_col): ?>
 		<th>User</th>
+<?php endif; ?>
 		<th>&nbsp;</th>
 	</tr>
 <?php
@@ -30,16 +32,18 @@ if (isset($color_list) && count($color_list) > 0)
 			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_bg()); ?></p>
 			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_fg()); ?></p>
 		</td>
-<?php if (!isset($hide_app_col)): ?>
+<?php if (!isset($hide_app_col) || !$hide_app_col): ?>
 		<td>
 			<!-- Application -->
 			<a href="<?php echo site_url('applications/view/' . $color->appid); ?>" title="<?php echo $color->app_package; ?>"><?php echo $color->app_name; ?></a>
 		</td>
 <?php endif; ?>
+<?php if (!isset($hide_user_col) || !$hide_user_col): ?>
 		<td>
 			<!-- User Name -->
 			<?php echo isset($color->username) ? $color->username : "<i>None</i>"; ?>
 		</td>
+<?php endif; ?>
 		<td>
 			<!-- Tools Buttons -->
 			<p><a href="<?php echo site_url('colors/edit/' . $color->id); ?>" class="btn"><i class="icon-edit"></i>&nbsp;Edit</a><p>

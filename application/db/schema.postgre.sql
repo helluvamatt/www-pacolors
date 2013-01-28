@@ -38,18 +38,16 @@ insert into permissions
 	(permissionname)
 values
 	('sys.users.manage'),		-- Create, update, delete user accounts
-	('sys.colors.add'),		-- Create new color settings, disable color settings owned by self
-	('sys.colors.moderate'),	-- Disable color settings by other users (including anonymous users)
-	('sys.colors.manage'),		-- Disable and re-enable color settings by other users (including anonymous users)
-	('sys.applications.add'),	-- Create new application records
-	('sys.applications.moderate'),	-- Disable applications records (any user)
-	('sys.applications.manage'); 	-- Disable and re-enable application records (any user)
+	('sys.colors.disable'),		-- Disable color settings by other users (including anonymous users)
+	('sys.colors.enable'),		-- Re-enable color settings by other users (including anonymous users)
+	('sys.applications.disable'),	-- Disable applications records (any user)
+	('sys.applications.enable'); 	-- Re-enable application records (any user)
 
 -- Role map
 create table permissions_map (
-	permissionid integer references permissions (id),
+	permission_id integer references permissions (id),
 	userid integer references users (id),
-	primary key (permissionid, userid)
+	primary key (permission_id, userid)
 );
 
 -- CodeIgniter Session table
@@ -97,6 +95,36 @@ create table votes (
 );
 alter sequence votes_id_seq owned by votes.id;
 
+-- Ensure tables are owned by the application user
+alter table votes owner to "app_pacolors";
+alter table colors owner to "app_pacolors";
+alter table applications owner to "app_pacolors";
+alter table users owner to "app_pacolors";
+
+-- -------------------------- --
+-- EXAMPLE DATA [POSTGRESQL]  --
+-- PA Colors Application      --
+-- -------------------------- --
+
+-- Example user data, password for all of these users is 'test'
+insert into users
+	(username,	 	email, 				realname_first, realname_last, 		password)
+values
+	('admin', 		'admin@pacolors.com', 		'Admin', 	'Administrator', 	'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('normal_user', 	'normal_user@pacolors.com', 	'Normal', 	'User', 		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('moderator',		'moderator@pacolors.com',	'Mod',		'Moderator',		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('no_first_name', 	'no_first_name@pacolors.com', 	'', 		'LastName', 		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('no_last_name', 	'no_last_name@pacolors.com', 	'FirstName', 	'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('no_real_name', 	'no_real_name@pacolors.com', 	'', 		'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1');
+
+-- Example permissions
+insert into permissions_map
+	(permission_id, userid)
+values
+	(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), 	-- Admin, does everything
+	(1, 3), (2, 3), (4, 3); 			-- Moderator, can delete applications and color settings by other users (but cannot re-enable them)
+							-- Normal, no special permissions
+
 -- Example applications
 insert into applications
 	(package_name, display_name)
@@ -109,23 +137,15 @@ values
 
 -- Example color settings
 insert into colors
-	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg)
+	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg, userid)
 values
-	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int),
-	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int),
-	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int),
-	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int),
-	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int),
-	(5, x'80000000'::int, NULL, NULL, x'FF000000'::int, NULL),
-	(5, x'10000000'::int, NULL, NULL, x'FF000000'::int, NULL);
-
--- Ensure tables are owned by the application user
-alter table votes owner to "app_pacolors";
-alter table colors owner to "app_pacolors";
-alter table applications owner to "app_pacolors";
-alter table users owner to "app_pacolors";
-
-
+	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int, 1),
+	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int, 1),
+	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int, 1),
+	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int, 1),
+	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int, 1),
+	(5, x'80000000'::int, NULL, NULL, x'FF000000'::int, NULL, 3),
+	(5, x'10000000'::int, NULL, NULL, x'FF000000'::int, NULL, 3);
 
 
 

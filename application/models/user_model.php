@@ -33,7 +33,7 @@ class User_model extends DB_Model
 	
 	public function has_permission($userid, $permission)
 	{
-		$result = $this->db->query("SELECT (map.userid, '_', perms.id) AS authid FROM permissions_map AS map INNER JOIN permissions AS perms ON perms.id = map.permissionid WHERE map.userid = ? AND perms.permissionname = ?", array($userid, $permission));
+		$result = $this->db->query("SELECT (map.userid, '_', perms.id) AS authid FROM permissions_map AS map INNER JOIN permissions AS perms ON perms.id = map.permission_id WHERE map.userid = ? AND perms.permissionname = ?", array($userid, $permission));
 		return $result->num_rows() == 1;
 	}
 
@@ -87,7 +87,7 @@ class User_Object extends DB_Object
 	
 	public function get_display_name()
 	{
-		if (isset($this->realname_first) && isset($this->realname_last))
+		if (isset($this->realname_first) && $this->realname_first != '' && isset($this->realname_last) && $this->realname_last != '')
 		{
 			return $this->realname_first . ' ' . $this->realname_last;
 		}

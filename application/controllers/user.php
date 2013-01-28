@@ -77,6 +77,7 @@ class User extends MY_Controller
 			$this->load->model('color_model');
 			$this->title .= ' | ' . $page_data['user']->get_display_name();
 			$list_data['color_list'] = $this->color_model->get_list_for_user($userid);
+			$list_data['hide_user_col'] = true;
 			$page_data['colorsetting_list'] = $this->load_view('colors/table', $list_data);
 			$this->render_page('users/colors', $page_data);
 		}
