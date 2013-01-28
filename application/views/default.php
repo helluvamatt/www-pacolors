@@ -50,7 +50,7 @@
 						<ul class="nav">
 							<li <?php if ($active == 'applications') echo "class=\"active\""; ?>><?php echo anchor('applications', 'Applications'); ?></li>
 							<li <?php if ($active == 'colors') echo "class=\"active\""; ?>><?php echo anchor('colors', 'Colors'); ?></li>
-							<li><a href="http://www.paranoidandroid.com">Parandoid Android</a></li>
+							<li><a href="http://www.paranoid-rom.com/">Parandoid Android</a></li>
 						</ul>
 						<ul class="nav pull-right">
 							<li class="dropdown">
