@@ -59,7 +59,33 @@ class User extends MY_Controller
 	
 	public function colors($id = 0)
 	{
-	
+		// Grab the user ID
+		if ($id == 0)
+		{
+			$userid = $this->userid;
+			$page_data['user'] = $this->user;
+		}
+		else
+		{
+			$userid = $id;
+			$page_data['user'] = $this->user_mode->get_user($userid);
+		}
+		
+		$this->title = "User Details";
+		if (isset($page_data['user']))
+		{
+			$this->load->model('color_model');
+			$this->title .= ' | ' . $page_data['user']->get_display_name();
+			$list_data['color_list'] = $this->color_model->get_list_for_user($userid);
+			$page_data['colorsetting_list'] = $this->load_view('colors/table', $list_data);
+			$this->render_page('users/colors', $page_data);
+		}
+		else
+		{
+			$page_data['error_title'] = "Invalid User";
+			$page_data['error_message'] = "That user was not found in the database.";
+			$this->render_page('error', $page_data);
+		}
 	}
 	
 }

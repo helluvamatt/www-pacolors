@@ -29,6 +29,11 @@ class Color_model extends Db_model
 	{
 		return $this->get_list(' AND colors.appid = ?', array($appid));
 	}
+	
+	public function get_list_for_user($userid)
+	{
+		return $this->get_list(' AND colors.userid = ?', array($userid));
+	}
 
 }
 
