@@ -84,6 +84,27 @@ else:
 endif;
 ?>
 							</li>
+<?php
+if ($role_map['sys.manage']):
+?>
+							<li class="dropdown">
+								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown">Manage&nbsp;<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><?php echo anchor('manage/colors', 'Manage Colors'); ?></li>
+									<li><?php echo anchor('manage/applications', 'Manage Applications'); ?></li>
+<?php
+	if ($role_map['sys.roles.admin']):
+?>
+									<li class="divider"></li>
+									<li><?php echo anchor('manage/users', 'Manage Users'); ?></li>
+<?php
+	endif;
+?>
+								</ul>
+							</li>
+<?php
+endif;
+?>
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>

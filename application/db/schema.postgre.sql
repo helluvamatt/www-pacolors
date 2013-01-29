@@ -26,28 +26,25 @@ create table users (
 alter sequence users_id_seq owned by users.id;
 
 -- Permissions table
-create sequence permissions_id_seq;
-create table permissions (
-	id integer primary key default nextval('permissions_id_seq'),
-	permissionname character varying(64) unique not null
+create sequence roles_id_seq;
+create table roles (
+	id integer primary key default nextval('roles_id_seq'),
+	rolename character varying(64) unique not null
 );
-alter sequence permissions_id_seq owned by permissions.id;
+alter sequence roles_id_seq owned by roles.id;
 
--- System permissions
-insert into permissions
-	(permissionname)
+-- System roles
+insert into roles
+	(rolename)
 values
-	('sys.users.manage'),		-- Create, update, delete user accounts
-	('sys.colors.disable'),		-- Disable color settings by other users (including anonymous users)
-	('sys.colors.enable'),		-- Re-enable color settings by other users (including anonymous users)
-	('sys.applications.disable'),	-- Disable applications records (any user)
-	('sys.applications.enable'); 	-- Re-enable application records (any user)
+	('sys.roles.admin'),		-- Administrator, can enable or disable applications, can enable or disable color settings by any user
+	('sys.roles.mod');		-- Moderator, can disable applications, can disable color settings by other users (including anonymous users)
 
 -- Role map
-create table permissions_map (
-	permission_id integer references permissions (id),
+create table role_map (
+	role_id integer references roles (id),
 	userid integer references users (id),
-	primary key (permission_id, userid)
+	primary key (role_id, userid)
 );
 
 -- CodeIgniter Session table
@@ -118,12 +115,12 @@ values
 	('no_real_name', 	'no_real_name@pacolors.com', 	'', 		'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1');
 
 -- Example permissions
-insert into permissions_map
-	(permission_id, userid)
+insert into role_map
+	(role_id, userid)
 values
-	(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), 	-- Admin, does everything
-	(1, 3), (2, 3), (4, 3); 			-- Moderator, can delete applications and color settings by other users (but cannot re-enable them)
-							-- Normal, no special permissions
+	(1, 1), (2, 1), 	-- Admin, does everything
+	(2, 3); 		-- Moderator, can delete applications and color settings by other users (but cannot re-enable them)
+				-- Normal, no special permissions
 
 -- Example applications
 insert into applications

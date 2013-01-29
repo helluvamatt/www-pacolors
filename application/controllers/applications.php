@@ -9,14 +9,12 @@ class Applications extends MY_Controller
 		$this->load->model('application_model');
 		$this->title = "Applications";
 		$this->data['active'] = "applications";
-		$this->can_disable_applications = $this->user_model->has_permission($this->userid, 'sys.applications.disable');
 	}
 	
 	public function index()
 	{
 		// TODO Pagination
 		$page_data['application_list'] = $this->application_model->get_list();
-		$page_data['show_manage_links'] = $this->can_disable_applications;
 		$this->render_page('applications/list', $page_data);
 	}
 	

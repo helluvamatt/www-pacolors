@@ -8,7 +8,7 @@ define('DEFAULT_COLOR_NAVBAR_GL', 0xFFFFFFFF);
 define('DEFAULT_COLOR_STATUS_BG', 0xFF000000);
 define('DEFAULT_COLOR_STATUS_FG', 0xFF33B5E5);
 
-define('SQL_COLORS', 'SELECT colors.*, applications.display_name AS app_name, applications.package_name AS app_package FROM colors LEFT JOIN applications ON applications.id = colors.appid WHERE colors.enabled');
+define('SQL_COLORS', 'SELECT colors.*, applications.display_name AS app_name, applications.package_name AS app_package, users.username AS username FROM colors LEFT JOIN applications ON applications.id = colors.appid LEFT JOIN users ON users.id = colors.userid WHERE colors.enabled');
 
 class Color_model extends Db_model
 {
@@ -45,6 +45,7 @@ class Color_model extends Db_model
 class Color_Object extends DB_Object
 {
 	public $userid;
+	public $username;
 	public $appid;
 	public $app_package;
 	public $app_name;

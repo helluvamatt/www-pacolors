@@ -13,27 +13,9 @@ class User_model extends DB_Model
 		return ($result->num_rows() > 0) ? $result->row(0, 'User_Object') : null;
 	}
 	
-	public function has_any_permissions($userid, $permissions)
+	public function has_role($userid, $role)
 	{
-		foreach ($permissions as $perm)
-		{
-			if ($this->has_permission($userid, $perm)) return true;
-		}
-		return false;
-	}
-	
-	public function has_all_permissions($userid, $permissions)
-	{
-		foreach ($permissions as $perm)
-		{
-			if ($this->has_permission($userid, $perm) == false) return false;
-		}
-		return true;
-	}
-	
-	public function has_permission($userid, $permission)
-	{
-		$result = $this->db->query("SELECT (map.userid, '_', perms.id) AS authid FROM permissions_map AS map INNER JOIN permissions AS perms ON perms.id = map.permission_id WHERE map.userid = ? AND perms.permissionname = ?", array($userid, $permission));
+		$result = $this->db->query("SELECT (map.userid, '_', roles.id) AS authid FROM role_map AS map INNER JOIN roles ON roles.id = map.role_id WHERE map.userid = ? AND roles.rolename = ?", array($userid, $role));
 		return $result->num_rows() == 1;
 	}
 
