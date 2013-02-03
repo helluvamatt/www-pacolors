@@ -22,12 +22,7 @@ class Color_model extends Db_model
 	public function get_list($and_where = '', $parms = null)
 	{
 		$result = $this->db->query(SQL_COLORS . $and_where, $parms);
-		$list = $result->result('Color_Object');
-		foreach ($list as $c)
-		{
-			
-		}
-		return $list;
+		return $result->result('Color_Object');
 	}
 	
 	public function get_list_for_application($appid)

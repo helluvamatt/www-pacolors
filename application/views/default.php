@@ -85,7 +85,7 @@ endif;
 ?>
 							</li>
 <?php
-if ($role_map['sys.manage']):
+if (has_role($role_map, 'sys.manage')):
 ?>
 							<li class="dropdown">
 								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown">Manage&nbsp;<b class="caret"></b></a>
@@ -93,7 +93,7 @@ if ($role_map['sys.manage']):
 									<li><?php echo anchor('manage/colors', 'Manage Colors'); ?></li>
 									<li><?php echo anchor('manage/applications', 'Manage Applications'); ?></li>
 <?php
-	if ($role_map['sys.roles.admin']):
+	if (has_role($role_map, 'sys.roles.admin')):
 ?>
 									<li class="divider"></li>
 									<li><?php echo anchor('manage/users', 'Manage Users'); ?></li>
