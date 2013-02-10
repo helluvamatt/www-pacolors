@@ -40,7 +40,7 @@ if (isset($color_list) && count($color_list) > 0)
 <?php if (!isset($hide_user_col) || !$hide_user_col): ?>
 		<td class="span2">
 			<!-- User Name -->
-			<?php echo isset($color->username) ? $color->username : "<i>None</i>"; ?>
+			<?php echo isset($color->user_name) ? $color->user_name : "<i>None</i>"; ?>
 		</td>
 <?php endif; ?>
 	</tr>

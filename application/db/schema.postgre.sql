@@ -7,8 +7,8 @@ drop table if exists votes;
 drop table if exists colors;
 drop table if exists applications;
 drop table if exists ci_sessions;
-drop table if exists permissions_map;
-drop table if exists permissions;
+drop table if exists role_map;
+drop table if exists roles;
 drop table if exists users;
 
 -- User table
@@ -78,6 +78,7 @@ create table colors (
 	color_navbar_gl integer,
 	color_status_bg integer,
 	color_status_fg integer,
+	created timestamp not null default current_timestamp,
 	enabled boolean not null default true
 );
 alter sequence colors_id_seq owned by colors.id;
@@ -91,12 +92,6 @@ create table votes (
 	enabled boolean not null default true
 );
 alter sequence votes_id_seq owned by votes.id;
-
--- Ensure tables are owned by the application user
-alter table votes owner to "app_pacolors";
-alter table colors owner to "app_pacolors";
-alter table applications owner to "app_pacolors";
-alter table users owner to "app_pacolors";
 
 -- -------------------------- --
 -- EXAMPLE DATA [POSTGRESQL]  --
@@ -112,7 +107,9 @@ values
 	('moderator',		'moderator@pacolors.com',	'Mod',		'Moderator',		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
 	('no_first_name', 	'no_first_name@pacolors.com', 	'', 		'LastName', 		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
 	('no_last_name', 	'no_last_name@pacolors.com', 	'FirstName', 	'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
-	('no_real_name', 	'no_real_name@pacolors.com', 	'', 		'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1');
+	('no_real_name', 	'no_real_name@pacolors.com', 	'', 		'', 			'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1'),
+	('disableduser', 	'disableduser@pacolors.com', 	'Disabled', 	'User', 		'$6$rounds=100000$NcGYvJ4O4g5a7kpK$1WM6np2O/Bl7vDbGrbdvvOHtL8I1kZcYIb5aEurVwCuKBpcpMV3UZtJlM.HBbVHuAN9PCtYczpygELc/2p.dR1');
+update users set enabled = false where username = 'disableduser';
 
 -- Example permissions
 insert into role_map
@@ -134,38 +131,12 @@ values
 
 -- Example color settings
 insert into colors
-	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg, userid)
+	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg, userid, created)
 values
-	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int, 1),
+	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int, 1, ),
 	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int, 1),
 	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int, 1),
 	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int, 1),
 	(4, x'FFFFFFFF'::int, x'FF00C1FF'::int, x'FFFFD400'::int, x'FF000000'::int, x'FF33B5E5'::int, 1),
 	(5, x'80000000'::int, NULL, NULL, x'FF000000'::int, NULL, 3),
 	(5, x'10000000'::int, NULL, NULL, x'FF000000'::int, NULL, 3);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

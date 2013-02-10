@@ -53,11 +53,35 @@
 							<li><a href="http://www.paranoid-rom.com/">Parandoid Android</a></li>
 						</ul>
 						<ul class="nav pull-right">
+<?php
+if (has_role($role_map, 'sys.manage')):
+?>
+							<li class="dropdown">
+								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown">Manage&nbsp;<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><?php echo anchor('manage/colors', 'Manage Colors'); ?></li>
+									<li><?php echo anchor('manage/applications', 'Manage Applications'); ?></li>
+<?php
+	if (has_role($role_map, 'sys.roles.admin')):
+?>
+									<li class="divider"></li>
+									<li><?php echo anchor('manage/users', 'Manage Users'); ?></li>
+<?php
+	endif;
+?>
+								</ul>
+							</li>
+<?php
+endif;
+?>
 							<li class="dropdown">
 <?php
 if (isset($user) && $user !== FALSE):
 ?>
-								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user->get_display_name(); ?>&nbsp;<b class="caret"></b></a>
+								<a href="Javascript:;" class="dropdown-toggle" style="padding: 1px 15px 1px; " data-toggle="dropdown">
+									<img src="<?php echo "http://www.gravatar.com/avatar/" . md5(strtolower($user->email)) . "?s=32&d=retro"; ?>" class="user-avatar" alt="<?php echo $user->email; ?>">
+									<span style="padding: 9px 0px; display: inline-block;"><?php echo $user->get_display_name(); ?>&nbsp;<b class="caret"></b></span>
+								</a>
 								<ul class="dropdown-menu">
 									<li><?php echo anchor('user/colors', 'My Colors'); ?></li>
 									<li class="divider"></li>
@@ -84,27 +108,6 @@ else:
 endif;
 ?>
 							</li>
-<?php
-if (has_role($role_map, 'sys.manage')):
-?>
-							<li class="dropdown">
-								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown">Manage&nbsp;<b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li><?php echo anchor('manage/colors', 'Manage Colors'); ?></li>
-									<li><?php echo anchor('manage/applications', 'Manage Applications'); ?></li>
-<?php
-	if (has_role($role_map, 'sys.roles.admin')):
-?>
-									<li class="divider"></li>
-									<li><?php echo anchor('manage/users', 'Manage Users'); ?></li>
-<?php
-	endif;
-?>
-								</ul>
-							</li>
-<?php
-endif;
-?>
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>

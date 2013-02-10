@@ -2,14 +2,14 @@
 
 require APPPATH . 'models/db_model.php';
 
-define('SQL_TABLE_USER', 'SELECT id, username, email, realname_first, realname_last, created FROM users');
+define('SQL_USER', 'SELECT id, username, email, realname_first, realname_last, created, CASE WHEN enabled THEN 1 ELSE 0 END AS enabled FROM users');
 
 class User_model extends DB_Model
 {
 
 	public function get_user($id)
 	{
-		$result = $this->db->query(SQL_TABLE_USER . ' WHERE id = ?', array($id));
+		$result = $this->db->query(SQL_USER . ' WHERE id = ?', array($id));
 		return ($result->num_rows() > 0) ? $result->row(0, 'User_Object') : null;
 	}
 	
@@ -56,6 +56,30 @@ class User_model extends DB_Model
 			$salt .= $alphabet[openssl_random_pseudo_bytes(1) % 64];
 		}
 		return crypt($password, $alg . $salt . '$');
+	}
+	
+	/* ---------------------------------------------------------------------- */
+	/* User Management Functions                                              */
+	/* ---------------------------------------------------------------------- */
+	
+	public function get_users($count = 0, $page = 0)
+	{
+		$query = SQL_USER . " ORDER BY username";
+		$args = array();
+		if ($count > 0)
+		{
+			$offset = $page * $count;
+			$args = array($count, $offset);
+			$query .= " LIMIT ? OFFSET ?";
+		}
+		$result = $this->db->query($query, $args);
+		return $result->result('User_Object');
+	}
+	
+	public function toggle_user($id)
+	{
+		$query = "UPDATE users SET enabled = NOT enabled WHERE id = ?";
+		return $this->db->query($query, array($id));
 	}
 }
 

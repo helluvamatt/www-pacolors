@@ -57,3 +57,31 @@ class MY_Controller extends CI_Controller
 	}
 
 }
+
+class Role_Controller extends MY_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	protected function check_role($role = 'sys.manage')
+	{
+		if (has_role($this->role_map, $role) == false)
+		{
+			$this->no_permission();
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	private function no_permission()
+	{
+		$page_data['error_title'] = "Not Authorized";
+		$page_data['error_message'] = "You do not have permission to do that.";
+		$this->render_page('error', $page_data);
+	}
+}
