@@ -8,7 +8,7 @@ class Applications extends MY_Controller
 		parent::__construct();
 		$this->load->model('application_model');
 		$this->title = "Applications";
-		$this->data['active'] = "applications";
+		$this->active = "applications";
 	}
 	
 	public function index()

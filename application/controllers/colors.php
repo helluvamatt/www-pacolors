@@ -10,7 +10,7 @@ class Colors extends MY_Controller
 		parent::__construct();
 		$this->load->model('color_model');
 		$this->title = "";
-		$this->data['active'] = "colors";
+		$this->active = "colors";
 	}
 	
 	public function index()

@@ -12,7 +12,7 @@ class Manage extends Role_Controller
 	# -------------------------------------------------------------------------
 	public function index()
 	{
-		
+		redirect(site_url('manage/colors'));
 	}
 	
 	# -------------------------------------------------------------------------
@@ -22,6 +22,7 @@ class Manage extends Role_Controller
 	{
 		if ($this->check_role('sys.manage'))
 		{
+			$this->active = "manage.colors";
 			$this->load->model('color_model');
 			$page_data['colors'] = $this->color_model->get_manage_list();
 			$this->render_page('manage/color_list', $page_data);
@@ -45,6 +46,7 @@ class Manage extends Role_Controller
 	{
 		if ($this->check_role('sys.manage'))
 		{
+			$this->active = "manage.applications";
 			$this->load->model('application_model');
 			$page_data['applications'] = $this->application_model->get_manage_list();
 			$this->render_page('manage/application_list', $page_data);
@@ -68,6 +70,7 @@ class Manage extends Role_Controller
 	{
 		if ($this->check_role('sys.roles.admin'))
 		{
+			$this->active = "manage.users";
 			$page_data['users'] = $this->user_model->get_users();
 			$this->render_page('manage/user_list', $page_data);
 		}

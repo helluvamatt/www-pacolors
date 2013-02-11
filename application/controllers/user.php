@@ -7,7 +7,6 @@ class User extends MY_Controller
 	{
 		parent::__construct();
 		$this->title = "";
-		$this->data['active'] = "user";
 	}
 	
 	public function login()
@@ -64,6 +63,7 @@ class User extends MY_Controller
 		{
 			$userid = $this->userid;
 			$page_data['user'] = $this->user;
+			$this->active = "user.colors";
 		}
 		else
 		{
