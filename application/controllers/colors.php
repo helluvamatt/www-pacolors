@@ -27,7 +27,7 @@ class Colors extends MY_Controller
 		if ($id > 0)
 		{
 			$this->title = "Edit Color Setting";
-			$page_data['color'] = $this->color_model->get_setting($id);
+			$page_data['color'] = $this->color_model->get_setting_by_id($id);
 		}
 		else
 		{

@@ -66,6 +66,7 @@ create table applications (
 	enabled boolean not null default true
 );
 alter sequence applications_id_seq owned by applications.id;
+create index idx_applications_display_name on applications (lower(display_name) varchar_pattern_ops);
 
 -- Colors table
 create sequence colors_id_seq;
@@ -131,9 +132,9 @@ values
 
 -- Example color settings
 insert into colors
-	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg, userid, created)
+	(appid, color_navbar_bg, color_navbar_fg, color_navbar_gl, color_status_bg, color_status_fg, userid)
 values
-	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int, 1, ),
+	(1, x'FF3B5998'::int, x'FFFAFAFA'::int, x'FFFFFFFF'::int, x'FF3B5998'::int, x'FFFAFAFA'::int, 1),
 	(1, x'FF2C4988'::int, x'B2E7E7E7'::int, x'FFEDEFF7'::int, x'FF2C4988'::int, x'FFE7E7E7'::int, 1),
 	(2, x'FF292929'::int, x'FF86B410'::int, x'FFDAE1C3'::int, x'FF292929'::int, x'FF86B410'::int, 1),
 	(3, x'FF0063B2'::int, x'B2FFFFFF'::int, x'FFFFFFFF'::int, x'FF007DE3'::int, x'FFFFFFFF'::int, 1),

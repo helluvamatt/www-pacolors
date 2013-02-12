@@ -18,6 +18,18 @@ class Applications extends MY_Controller
 		$this->render_page('applications/list', $page_data);
 	}
 	
+	public function aci($query)
+	{
+		$list = $this->application_model->search($query, 0, 8, 0);
+		$apps = array();
+		foreach ($list as $app)
+		{
+			$apps[] = array('id' => $app->id, 'primary' => $app->display_name, 'secondary' => $app->package_name);
+		}
+		header('Content-type: application/json');
+		echo json_encode($apps);
+	}
+	
 	public function view($id)
 	{
 		$this->title = "Application Details";

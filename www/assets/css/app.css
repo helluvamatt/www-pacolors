@@ -22,6 +22,11 @@ img.user-avatar
 	margin-bottom: 1px;
 }
 
+ul.typeahead > li > a > i.secondary
+{
+	font-size: 11px;
+}
+
 /* jPicker overrides */
 table.jPicker
 {

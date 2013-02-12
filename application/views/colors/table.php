@@ -22,7 +22,9 @@ if (isset($color_list) && count($color_list) > 0)
 	<tr>
 		<td class="span6">
 			<!-- Color Rendering / Hex Code -->
-			<img src="<?php echo site_url('render/preview/' . $color->id); ?>" alt="Preview" title="Preview" class="preview-img" />
+			<a href="<?php echo site_url('colors/edit/' . $color->id); ?>">
+				<img src="<?php echo site_url('render/preview/' . $color->id); ?>" alt="Preview" title="Preview" class="preview-img" />
+			</a>
 		</td>
 		<td class="span4">
 			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_bg()); ?></p>
