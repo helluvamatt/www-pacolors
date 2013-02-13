@@ -26,6 +26,8 @@ if (isset($color_list) && count($color_list) > 0)
 				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_gl()); ?>" alt="Navbar Glow" title="Navbar Glow">
 				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_bg()); ?>" alt="Status Bar Background" title="Status Bar Background">
 				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_fg()); ?>" alt="Status Bar Foreground" title="Status Bar Foreground">
+				<!-- Suggested Application -->
+				<span><?php echo $color->app_name; ?></span>
 			</a>
 			<div class="span2 pull-right" style="line-height: 48px; text-align: right; margin-right: 6px;">
 				<a href="<?php echo site_url('user/colors/' . $color->userid); ?>"><?php echo $color->user_name; ?></a>
