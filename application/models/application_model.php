@@ -49,8 +49,8 @@ class Application_model extends DB_Model
 	{
 		$prefix = ($options & OPTIONS_APPS_NO_WILDCARD_BEFORE == OPTIONS_APPS_NO_WILDCARD_BEFORE) ? '' : '%';
 		$suffix = ($options & OPTIONS_APPS_NO_WILDCARD_AFTER == OPTIONS_APPS_NO_WILDCARD_AFTER) ? '' : '%';
-		$where = SQL_APPS_DEFAULT_WHERE . ' AND LOWER(apps.display_name) LIKE ?';
-		return $this->get_list($count, $start, $where, array($prefix . $q . $suffix));
+		$where = SQL_APPS_DEFAULT_WHERE . ' AND lower(apps.display_name) LIKE ?';
+		return $this->get_list($count, $start, $where, array($prefix . strtolower($q) . $suffix));
 	}
 	
 	// If $id is NULL, create a new application record, and return it's ID, otherwise, attempt to update the existing record, which will return the same id on success, NULL on failure
