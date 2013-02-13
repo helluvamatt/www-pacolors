@@ -33,11 +33,11 @@ class MY_Controller extends CI_Controller
 	{
 		$this->data['title'] = $page_data['title'] = $this->title;
 		$this->data['active'] = $this->active;
+		$this->data['user'] = $page_data['user'] = isset($this->user) ? $this->user : NULL;
+		$this->data['role_map'] = $page_data['role_map'] = $this->role_map;
 		$this->data['content'] = $this->load_view($view, $page_data);
 		$this->data['extra_js'] = $this->extra_js;
 		$this->data['extra_js_file'] = $this->extra_js_file;
-		$this->data['user'] = isset($this->user) ? $this->user : NULL;
-		$this->data['role_map'] = $this->role_map;
 		$this->load->view('default', $this->data);
 	}
 	

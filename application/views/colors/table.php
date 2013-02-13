@@ -60,6 +60,13 @@ if (isset($color_list) && count($color_list) > 0)
 <?php } ?>
 					</p>
 				</div>
+				<div class="pull-right" style="text-align: right;">
+<?php if (isset($user) && $color->userid == $user->id) { ?>
+					<!-- Tools -->
+					<p><a href="<?php echo site_url('colors/edit/' . $color->id); ?>" title="Edit my color"   class="btn btn-mini" data-placement="left">Edit&nbsp;<i class="icon-edit"></i></a></p>
+					<p><a href="<?php echo site_url('colors/delete/' . $color->id); ?>" title="Hide my color" class="btn btn-mini btn-danger" data-placement="left">Delete&nbsp;<i class="icon-white icon-trash"></i></a></p>
+<?php } ?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -70,8 +77,7 @@ if (isset($color_list) && count($color_list) > 0)
 </div>
 <script type="text/javascript">
 $(function() {
-	$('a.accordion-toggle[title]').tooltip();
-	$('div.vote-controls a[title]').tooltip();
+	$('a[title]').tooltip();
 });
 </script>
 <!-- Color List End -->
