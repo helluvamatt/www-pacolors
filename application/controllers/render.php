@@ -10,6 +10,27 @@ class Render extends CI_Controller
 		$this->load->model('color_model');
 	}
 	
+	public function color($color)
+	{
+		$image = imagecreatetruecolor(32, 32);
+		imagesavealpha($image, true);
+		list($alpha, $red, $green, $blue) = Color_Object::components($color);
+		
+		if ($alpha < 0xFF)
+		{
+			$bg = imagecreatefromstring(base64_decode(TILE_BG));
+			imagesettile($image, $bg);
+			imagefill($image, 0, 0, IMG_COLOR_TILED);
+		}
+		
+		$fg = imagecolorallocatealpha($image, $red, $green, $blue, Color_Object::alpha_to_gd($alpha));
+		imagefilledrectangle($image, 0, 0, 31, 31, $fg);
+		
+		header('Content-Type: image/png');
+		imagepng($image);
+		imagedestroy($image);
+	}
+	
 	public function preview($id)
 	{
 		$color = $this->color_model->get_setting_by_id($id);

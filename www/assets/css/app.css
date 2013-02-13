@@ -27,6 +27,31 @@ ul.typeahead > li > a > i.secondary
 	font-size: 11px;
 }
 
+div.vote-controls
+{
+	width: 24px;
+	margin-left: 5px;
+	text-align: center;
+	vertical-align: middle;
+	display: inline-block;
+}
+div.votes-label
+{
+	display: inline-block;
+	font-weight: bold;
+}
+
+a.accordion-toggle.no-underline
+{
+	text-decoration: none;
+}
+
+img.color-control
+{
+	border-style: solid;
+	border-width: 2px;
+}
+
 /* jPicker overrides */
 table.jPicker
 {

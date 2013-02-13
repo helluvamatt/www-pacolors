@@ -68,7 +68,7 @@ class User extends MY_Controller
 		else
 		{
 			$userid = $id;
-			$page_data['user'] = $this->user_mode->get_user($userid);
+			$page_data['user'] = $this->user_model->get_user($userid);
 		}
 		
 		$this->title = "User Details";

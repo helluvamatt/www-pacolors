@@ -3,55 +3,76 @@ if (isset($color_list) && count($color_list) > 0)
 {
 ?>
 <!-- Color List Start -->
-<table class="table table-striped table-bordered">
-	<tr>
-		<th>Preview</th>
-		<th>Color Settings</th>
-<?php if (!isset($hide_app_col) || !$hide_app_col): ?>
-		<th>Application</th>
-<?php endif; ?>
-<?php if (!isset($hide_user_col) || !$hide_user_col): ?>
-		<th>User</th>
-<?php endif; ?>
-	</tr>
+<div class="accordion" id="color_list_accordion">
 <?php
 	foreach($color_list as $color)
 	{
 ?>
 <!-- Color Start -->
-	<tr>
-		<td class="span6">
-			<!-- Color Rendering / Hex Code -->
-			<a href="<?php echo site_url('colors/edit/' . $color->id); ?>">
-				<img src="<?php echo site_url('render/preview/' . $color->id); ?>" alt="Preview" title="Preview" class="preview-img" />
+	<div class="accordion-group">
+		<div class="accordion-heading row">
+			<div class="span1" style="vertical-align: middle; line-height: 48px;">
+				<div class="vote-controls" style="line-height: 24px;">
+					<a href="Javascript:;" title="Vote Up"><i class="icon-chevron-up"></i></a>
+					<a href="Javascript:;" title="Vote Down"><i class="icon-chevron-down"></i></a>
+				</div>
+				<div class="votes-label" id="votes_<?php echo $color->id; ?>">1</div>
+			</div>
+			<a class="accordion-toggle pull-left no-underline" title="Click for details." style="vertical-align: middle;" data-toggle="collapse" data-parent="#color_list_accordion" href="#collapse_color_<?php echo $color->id; ?>">
+				<span><?php printf("#%u", $color->id); ?></span>
+				<!-- Color Controls -->
+				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_bg()); ?>" alt="Navbar Background" title="Navbar Background">
+				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_fg()); ?>" alt="Navbar Buttons" title="Navbar Buttons">
+				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_gl()); ?>" alt="Navbar Glow" title="Navbar Glow">
+				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_bg()); ?>" alt="Status Bar Background" title="Status Bar Background">
+				<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_fg()); ?>" alt="Status Bar Foreground" title="Status Bar Foreground">
 			</a>
-		</td>
-		<td class="span4">
-			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_bg()); ?></p>
-			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_fg()); ?></p>
-			<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Glow:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_gl()); ?></p>
-			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_bg()); ?></p>
-			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_fg()); ?></p>
-		</td>
-<?php if (!isset($hide_app_col) || !$hide_app_col): ?>
-		<td class="span2">
-			<!-- Application -->
-			<a href="<?php echo site_url('applications/view/' . $color->appid); ?>" title="<?php echo $color->app_package; ?>"><?php echo $color->app_name; ?></a>
-		</td>
-<?php endif; ?>
-<?php if (!isset($hide_user_col) || !$hide_user_col): ?>
-		<td class="span2">
-			<!-- User Name -->
-			<?php echo isset($color->user_name) ? $color->user_name : "<i>None</i>"; ?>
-		</td>
-<?php endif; ?>
-	</tr>
-<!-- Color End->
+			<div class="span2 pull-right" style="line-height: 48px; text-align: right; margin-right: 6px;">
+				<a href="<?php echo site_url('user/colors/' . $color->userid); ?>"><?php echo $color->user_name; ?></a>
+			</div>
+		</div>
+		<div class="accordion-body collapse" id="collapse_color_<?php echo $color->id; ?>">
+			<div class="accordion-inner row">
+				<div class="span7">
+					<!-- Color Rendering -->
+					<img src="<?php echo site_url('render/preview/' . $color->id); ?>" alt="Preview" title="Preview" class="preview-img" />
+				</div>
+				<div class="span4">
+					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_bg()); ?></p>
+					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_fg()); ?></p>
+					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Glow:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_gl()); ?></p>
+					<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_bg()); ?></p>
+					<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_status_fg()); ?></p>
+					<!-- Application -->
+					<p>
+						<b style="display: inline-block; width: 180px;">Suggested Application:</b>
+						<a href="<?php echo site_url('applications/view/' . $color->appid); ?>" title="<?php echo $color->app_package; ?>"><?php echo $color->app_name; ?></a>
+					</p>
+					<!-- User Name -->
+					<p>
+						<b style="display: inline-block; width: 180px;">User:</b>
+<?php if (isset($color->user_name)) { ?>
+						<a href="<?php echo site_url('user/colors/' . $color->userid); ?>" title="<?php echo $color->user_name; ?>"><?php echo $color->user_name; ?></a>
+<?php } else { ?>
+						<i>None</i>
+<?php } ?>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- Color End -->
 <?php
 	}
 ?>
+</div>
+<script type="text/javascript">
+$(function() {
+	$('a.accordion-toggle[title]').tooltip();
+	$('div.vote-controls a[title]').tooltip();
+});
+</script>
 <!-- Color List End -->
-</table>
 <?php
 }
 else
