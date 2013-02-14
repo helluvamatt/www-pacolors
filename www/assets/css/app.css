@@ -52,6 +52,15 @@ img.color-control
 	border-width: 2px;
 }
 
+div.alert.fixedtop
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 50;
+}
+
 /* jPicker overrides */
 table.jPicker
 {

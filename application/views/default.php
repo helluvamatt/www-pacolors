@@ -118,5 +118,19 @@ endif;
 <?php echo $content; ?>
 
 		</div> <!-- /container -->
+<?php if (isset($flashdata_message)) { ?>
+		<div class="alert alert-block fade in fixedtop alert-<?php echo $flashdata_message->css_class; ?>">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<strong><?php echo $flashdata_message->message; ?></strong>
+		</div>
+		<script type="text/javascript">
+			$(function() {
+				$("div.alert").alert();
+				setTimeout(function() {
+					$("div.alert.fixedtop").alert('close');
+				}, 3000);
+			});
+		</script>
+<?php } ?>
 	</body>
 </html>

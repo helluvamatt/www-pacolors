@@ -38,6 +38,7 @@ class MY_Controller extends CI_Controller
 		$this->data['content'] = $this->load_view($view, $page_data);
 		$this->data['extra_js'] = $this->extra_js;
 		$this->data['extra_js_file'] = $this->extra_js_file;
+		$this->data['flashdata_message'] = $this->get_flashdata_message();
 		$this->load->view('default', $this->data);
 	}
 	
@@ -54,6 +55,18 @@ class MY_Controller extends CI_Controller
 	protected function register_js($name, $script)
 	{
 		$this->extra_js[$name] = $script;
+	}
+	
+	protected function get_flashdata_message()
+	{
+		$msg = $this->session->flashdata('message');
+		return isset($msg) ? json_decode($msg) : NULL;
+	}
+	
+	protected function set_flashdata_message($css_class, $message, $redirect = NULL)
+	{
+		$this->session->set_flashdata('message', json_encode(array('css_class' => $css_class, 'message' => $message)));
+		if (isset($redirect)) redirect(site_url($redirect));
 	}
 
 }
