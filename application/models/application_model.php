@@ -53,13 +53,16 @@ class Application_model extends DB_Model
 		return $this->get_list($count, $start, $where, array($prefix . strtolower($q) . $suffix));
 	}
 	
-	// If $id is NULL, create a new application record, and return it's ID, otherwise, attempt to update the existing record, which will return the same id on success, NULL on failure
-	/*
-	public function save_application($package_name, $display_name, $id = NULL)
+	public function get_or_create_application($package_name, $display_name)
 	{
-		// TODO
+		// Search for app with package name and display name
+		$ex_app = $this->get_application(array('apps.package_name' => $package_name, 'apps.display_name' => $display_name));
+		if ($ex_app != NULL) return $ex_app->id;
+		
+		$query = "INSERT INTO applications (package_name, display_name) VALUES (?, ?)";
+		$this->db->query($query, array($package_name, $display_name));
+		return $this->db->insert_id();
 	}
-	*/
 
 	/* --------------------------------------------------------------------- */
 	/* Application Management Functions                                      */

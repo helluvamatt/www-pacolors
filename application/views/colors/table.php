@@ -39,7 +39,7 @@ if (isset($color_list) && count($color_list) > 0)
 					<!-- Color Rendering -->
 					<img src="<?php echo site_url('render/preview/' . $color->id); ?>" alt="Preview" title="Preview" class="preview-img" />
 				</div>
-				<div class="span4">
+				<div class="span3">
 					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Background:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_bg()); ?></p>
 					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Foreground:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_fg()); ?></p>
 					<p><b style="display: inline-block; width: 180px;">Navbar&nbsp;Glow:</b>&nbsp;<?php echo Color_Object::format_color_string($color->get_color_navbar_gl()); ?></p>
@@ -61,10 +61,14 @@ if (isset($color_list) && count($color_list) > 0)
 					</p>
 				</div>
 				<div class="pull-right" style="text-align: right;">
-<?php if (isset($user) && $color->userid == $user->id) { ?>
 					<!-- Tools -->
-					<p><a href="<?php echo site_url('colors/edit/' . $color->id); ?>" title="Edit my color"   class="btn btn-mini" data-placement="left">Edit&nbsp;<i class="icon-edit"></i></a></p>
-					<p><a href="<?php echo site_url('colors/delete/' . $color->id); ?>" title="Hide my color" class="btn btn-mini btn-danger" data-placement="left">Delete&nbsp;<i class="icon-white icon-trash"></i></a></p>
+<?php if ( isset($user) ) { ?>
+<?php if ( $color->userid == $user->id ) { ?>
+					<p><a href="<?php echo site_url('colors/edit/' . $color->id); ?>" title="Edit my color setting"   class="btn btn-mini" data-placement="left">Edit&nbsp;<i class="icon-edit"></i></a></p>
+					<p><a href="<?php echo site_url('colors/delete/' . $color->id); ?>" title="Hide my color setting" class="btn btn-mini btn-danger" data-placement="left">Delete&nbsp;<i class="icon-white icon-trash"></i></a></p>
+<?php } else { ?>
+					<p><a href="<?php echo site_url('colors/edit/' . $color->id); ?>" title="Create new color setting from this" class="btn btn-mini btn-info" data-placement="left">Duplicate&nbsp;<i class="icon-white icon-share"></i></a></p>
+<?php } ?>
 <?php } ?>
 				</div>
 			</div>

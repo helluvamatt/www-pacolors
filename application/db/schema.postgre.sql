@@ -67,6 +67,7 @@ create table applications (
 );
 alter sequence applications_id_seq owned by applications.id;
 create index idx_applications_display_name on applications (lower(display_name) varchar_pattern_ops);
+create unique index uidx_applications_identifier on applications (lower(display_name), lower(package_name));
 
 -- Colors table
 create sequence colors_id_seq;

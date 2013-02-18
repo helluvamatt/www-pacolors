@@ -1,12 +1,13 @@
 <h1><?php echo $title; ?>&nbsp;<small>Hover over the image to change options.</small></h1>
 <?php
-echo form_open('colors/save', array('class' => 'form-horizontal'), array('id' => isset($color->id) ? $color->id : 0));
-echo form_hidden('color_navbar_bg', Color_Object::format_color_string($color->get_color_navbar_bg(), FALSE));
-echo form_hidden('color_navbar_fg', Color_Object::format_color_string($color->get_color_navbar_fg(), FALSE));
-echo form_hidden('color_navbar_gl', Color_Object::format_color_string($color->get_color_navbar_gl(), FALSE));
-echo form_hidden('color_status_bg', Color_Object::format_color_string($color->get_color_status_bg(), FALSE));
-echo form_hidden('color_status_fg', Color_Object::format_color_string($color->get_color_status_fg(), FALSE));
-echo form_hidden('app_id', $color->appid);
+echo form_open('colors/edit', array('class' => 'form-horizontal'), array(
+	'id' => (isset($color) ? $color->id : 0),
+	'color_navbar_bg' => Color_Object::format_color_string($color->get_color_navbar_bg(), FALSE),
+	'color_navbar_fg' => Color_Object::format_color_string($color->get_color_navbar_fg(), FALSE),
+	'color_navbar_gl' => Color_Object::format_color_string($color->get_color_navbar_gl(), FALSE),
+	'color_status_bg' => Color_Object::format_color_string($color->get_color_status_bg(), FALSE),
+	'color_status_fg' => Color_Object::format_color_string($color->get_color_status_fg(), FALSE)
+));
 ?>
 	<div class="control-group">
 		<label class="control-label" for="inputAppName">Application Name</label>
@@ -21,7 +22,7 @@ echo form_hidden('app_id', $color->appid);
 			<input type="text" id="inputAppPackage" name="app_package" placeholder="com.example.app" value="<?php echo set_value('app_package', $color->app_package); ?>">
 		</div>
 	</div>
-
+	
 	<div class="row">
 		<div class="span8" style="position:relative;" id="preview_container">
 			<img src="<?php echo site_url('render/live'); ?>" alt="preview" id="preview_img" />
@@ -39,12 +40,21 @@ echo form_hidden('app_id', $color->appid);
 			<p><b style="display: inline-block; width: 180px;">Status&nbsp;Bar&nbsp;Foreground:</b>&nbsp;<span data-param="status_fg" class="picker"></span></p>
 		</div>
 	</div>
+<?php if ($save_as) { ?>
 
+	<div class="row" style="margin-top: 16px;">
+		<div class="offset1 span4 alert alert-block alert-danger">
+			<h4>Achtung!</h4>
+			<p>This color setting will be saved as a new color setting!</p>
+		</div>
+	</div>
+<?php } ?>
+	
 	<div class="form-actions">
 		<button type="submit" class="btn btn-primary">Save</button>
 		<a href="/colors" class="btn">Cancel</a>
 	</div>
-</form>
+<?php echo form_close(); ?>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jpicker-1.1.6.custom.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/autocomplete.js'); ?>"></script>
 <script type="text/javascript">

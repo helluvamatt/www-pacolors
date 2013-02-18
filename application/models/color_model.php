@@ -88,11 +88,50 @@ class Color_model extends Db_model
 		$query = "UPDATE colors SET enabled = NOT enabled WHERE id = ?";
 		return $this->db->query($query, array($id));
 	}
+	
+	/* --------------------------------------------------------------------- */
+	/* Color Settings Save and Delete Functions                              */
+	/* --------------------------------------------------------------------- */
+	public function hide_color($id)
+	{
+		$query = "UPDATE colors SET enabled = FALSE WHERE id = ?";
+		return $this->db->query($query, array($id));
+	}
+	
+	public function save_color($color_obj)
+	{
+		$this->db->set('userid', $color_obj->userid);
+		$this->db->set('appid', $color_obj->appid);
+		// XXX This is PostgreSQL specific!!
+		if (isset($color_obj->color_navbar_bg)) $this->db->set('color_navbar_bg', "x'" . dechex($color_obj->color_navbar_bg) . "'::int", FALSE);
+		if (isset($color_obj->color_navbar_fg)) $this->db->set('color_navbar_fg', "x'" . dechex($color_obj->color_navbar_fg) . "'::int", FALSE);
+		if (isset($color_obj->color_navbar_gl)) $this->db->set('color_navbar_gl', "x'" . dechex($color_obj->color_navbar_gl) . "'::int", FALSE);
+		if (isset($color_obj->color_status_bg)) $this->db->set('color_status_bg', "x'" . dechex($color_obj->color_status_bg) . "'::int", FALSE);
+		if (isset($color_obj->color_status_fg)) $this->db->set('color_status_fg', "x'" . dechex($color_obj->color_status_fg) . "'::int", FALSE);
+		if ($color_obj->id > 0)
+		{
+			// Active record update
+			$this->db->where('id', $color_obj->id);
+			$this->db->update('colors');
+			return $color_obj->id;
+		}
+		else
+		{
+			// Active record insert 
+			$this->db->insert('colors');
+			return $this->db->insert_id();
+		}
+	}
 
 }
 
 class Color_Object extends DB_Object
 {
+	public function __construct()
+	{
+		$this->id = 0;
+	}
+
 	public $userid;
 	public $user_name;
 	public $user_enabled;
@@ -126,6 +165,7 @@ class Color_Object extends DB_Object
 	
 	public static function parse_color_string($color_str)
 	{
+		if ($color_str === FALSE) return NULL;
 		return hexdec($color_str);
 	}
 	
