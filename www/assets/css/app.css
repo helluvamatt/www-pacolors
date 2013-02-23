@@ -27,17 +27,8 @@ ul.typeahead > li > a > i.secondary
 	font-size: 11px;
 }
 
-div.vote-controls
-{
-	width: 24px;
-	margin-left: 5px;
-	text-align: center;
-	vertical-align: middle;
-	display: inline-block;
-}
 div.votes-label
 {
-	display: inline-block;
 	font-weight: bold;
 }
 

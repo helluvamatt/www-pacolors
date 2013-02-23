@@ -10,6 +10,7 @@ drop table if exists ci_sessions;
 drop table if exists role_map;
 drop table if exists roles;
 drop table if exists users;
+drop function if exists cast_vote ( int , int );
 
 -- User table
 create sequence users_id_seq;
@@ -94,6 +95,25 @@ create table votes (
 	enabled boolean not null default true
 );
 alter sequence votes_id_seq owned by votes.id;
+create unique index idx_votes_userid_colorid on votes (colorid, userid);
+
+-- Vote function
+create or replace function
+cast_vote ( user_id integer, color_id integer )
+returns boolean
+as $$
+	DECLARE
+		retval boolean;
+	BEGIN
+		UPDATE votes SET enabled = NOT enabled WHERE votes.colorid = color_id AND votes.userid = user_id RETURNING votes.enabled INTO retval;
+		IF NOT FOUND THEN
+			INSERT INTO votes (userid, colorid) VALUES (user_id, color_id);
+			RETURN TRUE;
+		END IF;
+		RETURN retval;
+	END
+$$
+language plpgsql;
 
 -- -------------------------- --
 -- EXAMPLE DATA [POSTGRESQL]  --

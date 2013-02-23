@@ -82,6 +82,7 @@ if (isset($user) && $user !== FALSE):
 								</a>
 								<ul class="dropdown-menu">
 									<li <?php if ($active == 'user.colors') echo "class=\"active\""; ?>><?php echo anchor('user/colors', 'My Colors'); ?></li>
+									<li <?php if ($active == 'user.favorites') echo "class=\"active\""; ?>><?php echo anchor('user/favorites', 'My Favorites'); ?></li>
 									<li class="divider"></li>
 									<li><?php echo anchor('user/logout', 'Log Out'); ?></li>
 								</ul>

@@ -22,7 +22,9 @@ applications.display_name AS app_name,
 applications.package_name AS app_package,
 CASE WHEN applications.enabled THEN 1 ELSE 0 END AS app_enabled,
 users.username AS user_name,
-CASE WHEN users.enabled THEN 1 ELSE 0 END AS user_enabled
+CASE WHEN users.enabled THEN 1 ELSE 0 END AS user_enabled,
+(SELECT count(*) FROM votes WHERE votes.enabled AND votes.colorid = colors.id) AS votes,
+(SELECT count(*) FROM votes WHERE votes.enabled AND votes.colorid = colors.id AND votes.userid = ?) AS user_voted
 FROM colors
 LEFT JOIN applications ON applications.id = colors.appid
 LEFT JOIN users ON users.id = colors.userid
@@ -33,15 +35,16 @@ define('SQL_COLORS_ORDERBY', 'ORDER BY colors.created, colors.id');
 class Color_model extends Db_model
 {
 
-	public function get_setting_by_id($id)
+	public function get_setting_by_id($userid, $id)
 	{
-		return $this->get_setting(array('colors.id' => $id));
+		return $this->get_setting($userid, array('colors.id' => $id));
 	}
 	
-	private function get_setting($params)
+	private function get_setting($userid, $params)
 	{
 		$sql = SQL_COLORS . ' ' . SQL_COLORS_DEFAULT_WHERE;
 		$parms = array();
+		$parms[] = $userid;
 		foreach ($params as $param => $value)
 		{
 			$sql .= " AND " . $param . " = ?";
@@ -51,9 +54,11 @@ class Color_model extends Db_model
 		return $result->num_rows() > 0 ? $result->row(0, 'Color_Object') : null;
 	}
 
-	public function get_list($count = 0, $page = 0, $where = SQL_COLORS_DEFAULT_WHERE, $params = array())
+	public function get_list($userid, $count = 0, $page = 0, $where = SQL_COLORS_DEFAULT_WHERE, $params = array())
 	{
 		$sql = SQL_COLORS . ' ' . $where;
+		$params = array();
+		$params[] = $userid;
 		if ($count > 0)
 		{
 			$sql .= " LIMIT ? OFFSET ?";
@@ -65,14 +70,50 @@ class Color_model extends Db_model
 		return $result->result('Color_Object');
 	}
 	
-	public function get_list_for_application($appid, $count = 0, $page = 0)
+	public function get_list_for_application($userid, $appid, $count = 0, $page = 0)
 	{
-		return $this->get_list($count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.appid = ?', array($appid));
+		return $this->get_list($userid, $count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.appid = ?', array($appid));
 	}
 	
-	public function get_list_for_user($userid, $count = 0, $page = 0)
+	public function get_list_for_user($userid, $id, $count = 0, $page = 0)
 	{
-		return $this->get_list($count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.userid = ?', array($userid));
+		return $this->get_list($userid, $count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.userid = ?', array($id));
+	}
+
+	/* --------------------------------------------------------------------- */
+	/* Voting System Functions                                               */
+	/* --------------------------------------------------------------------- */
+	public function cast_vote($userid, $colorid)
+	{
+		$query = $this->db->query("SELECT cast_vote(?, ?)", array($userid, $colorid));
+		$result = $query->row_array();
+		return $result['cast_vote'] == 't';
+	}
+	
+	public function check_vote($userid, $colorid)
+	{
+		$this->db->where('userid', $userid);
+		$this->db->where('colorid', $colorid);
+		$this->db->where('enabled', TRUE);
+		return $this->db->count_all_results('votes') == 1;
+	}
+	
+	public function count_votes_for_setting($colorid)
+	{
+		$this->db->where(array('enabled' => 'TRUE', 'colorid' => $colorid));
+		return $this->db->count_all_results('votes');
+	}
+	
+	public function get_votes_for_setting($colorid)
+	{
+		$this->db->where(array('colorid' => $colorid));
+		return $this->db->get('votes');
+	}
+	
+	public function get_votes_by_user($userid)
+	{
+		$this->db->where('userid', $userid);
+		return $this->db->get('votes');
 	}
 	
 	/* --------------------------------------------------------------------- */
@@ -140,6 +181,9 @@ class Color_Object extends DB_Object
 	public $app_package;
 	public $app_name;
 	public $app_enabled;
+	
+	public $votes;
+	public $user_voted;
 	
 	public $color_navbar_bg;
 	public $color_navbar_fg;

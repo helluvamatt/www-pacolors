@@ -15,7 +15,7 @@ class Colors extends MY_Controller
 	
 	public function index()
 	{
-		$page_data['color_list'] = $this->color_model->get_list();
+		$page_data['color_list'] = $this->color_model->get_list(isset($this->user) ? $this->user->id : '0');
 		$this->render_page('colors/list', $page_data);
 	}
 	
@@ -54,7 +54,7 @@ class Colors extends MY_Controller
 				
 				// Owner sanity checks
 				$ex_id = filter_var($this->input->post('id'), FILTER_SANITIZE_NUMBER_INT);
-				$ex_color = $this->color_model->get_setting_by_id($ex_id);
+				$ex_color = $this->color_model->get_setting_by_id($this->user->id, $ex_id);
 				if (isset($ex_color)							// Is there even an existing color?
 					&& $ex_color->userid == $this->user->id)	// Is the existing color owned by the logged in user?
 				{
@@ -78,7 +78,7 @@ class Colors extends MY_Controller
 				
 			}
 			
-			if ($id > 0) $color = $this->color_model->get_setting_by_id($id);
+			if ($id > 0) $color = $this->color_model->get_setting_by_id($this->user->id, $id);
 			
 			$this->title = ($id > 0) ? "Edit Color Setting" : "Add Color Setting";
 			
@@ -95,7 +95,7 @@ class Colors extends MY_Controller
 	
 	public function delete($id)
 	{
-		$color = $this->color_model->get_setting_by_id($id);
+		$color = $this->color_model->get_setting_by_id(0, $id);
 		if (isset($color))
 		{
 			if (isset($this->user) && $color->userid == $this->user->id)
@@ -116,10 +116,33 @@ class Colors extends MY_Controller
 		}
 	}
 	
+	public function vote($id)
+	{
+		header("Content-type: text/xml");
+		if (isset($this->user))
+		{
+			$color = $this->color_model->get_setting_by_id($this->user->id, $id);
+			if (isset($color))
+			{
+				$vote_cast = $this->color_model->cast_vote($this->user->id, $color->id);
+				$count = $this->color_model->count_votes_for_setting($color->id);
+				echo "<vote status=\"success\" id=\"" . $color->id . "\" count=\"" . $count . "\" vote_cast=\"" . ($vote_cast ? "1" : "0") . "\">Success</vote>";
+			}
+			else
+			{
+				echo "<vote status=\"error\">Invalid color setting.</vote>\n";
+			}
+		}
+		else
+		{
+			echo "<vote status=\"error\">You must be logged in to vote!</vote>\n";
+		}
+	}
+	
 	public function view($id)
 	{
 		$this->title = "View Color Details";
-		$page_data['color'] = $this->color_model->get_setting_by_id($id);
+		$page_data['color'] = $this->color_model->get_setting_by_id(0, $id);
 		if (isset($page_data['color']))
 		{
 			$this->render_page('colors/view', $page_data);
