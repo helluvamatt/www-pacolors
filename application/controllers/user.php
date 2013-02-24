@@ -15,6 +15,7 @@ class User extends MY_Controller
 		$this->load->library('form_validation');
 		
 		$redirect = $this->input->post('redirect');
+		if ($redirect == 'user/login') $redirect = '';
 		
 		$this->form_validation->set_rules('username', 'Username', 'required|callback_verify_login[password]');
 		$this->form_validation->set_rules('password', 'Password', 'required');
@@ -53,7 +54,41 @@ class User extends MY_Controller
 	
 	public function signup()
 	{
+		$this->title = "Sign Up";
+		$this->load->library('form_validation');
+		$this->load->helper('form');
+		$page_data = array();
 		
+		$this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
+		$this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
+		$this->form_validation->set_rules('password_1', 'Password', 'required|min_length[6]');
+		$this->form_validation->set_rules('password_2', 'Password Verification', 'required|matches[password_1]');
+		if ($this->form_validation->run())
+		{
+			// Do signup
+			$username = $this->input->post('username');
+			$email = $this->input->post('email');
+			$realname_first = $this->input->post('realname_first');
+			$realname_last = $this->input->post('realname_last');
+			$password = $this->input->post('password_1');
+			$new_userid = $this->user_model->add_user($username, $email, $password, $realname_first, $realname_last);
+			if ($new_userid > 0)
+			{
+				// Automatically log in
+				$this->session->set_userdata('user_id', $new_userid);
+			
+				// Redirect to home page
+				$this->set_flashdata_message('success', 'Sign Up Successful! Welcome!', '');
+			}
+			else
+			{
+				$page_data['error'] = "There was a problem during signup. Please try again.";
+			}
+			
+		}
+		
+		// Load form
+		$this->render_page('users/signup', $page_data);
 	}
 	
 	public function colors($id = 0)

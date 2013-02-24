@@ -38,9 +38,15 @@ class User_model extends DB_Model
 		return 0;
 	}
 	
-	public function add_user($password)
+	public function add_user($username, $email, $password, $realname_first, $realname_last)
 	{
-		return $this->create_hash($password);
+		$password_hashed = $this->create_hash($password);
+		$this->db->set('username', $username);
+		$this->db->set('email', $email);
+		$this->db->set('password', $password_hashed);
+		if (isset($realname_first) && $realname_first != '') $this->db->set('realname_first', $realname_first);
+		if (isset($realname_last) && $realname_last != '') $this->db->set('realname_last', $realname_last);
+		return $this->db->insert('users') ? $this->db->insert_id() : 0;
 	}
 
 	private function create_hash($password)
