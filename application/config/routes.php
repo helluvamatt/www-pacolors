@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "applications";
+$route['default_controller'] = "colors";
 $route['404_override'] = '';
 
 

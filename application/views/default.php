@@ -48,8 +48,8 @@
 					<a class="brand" href="<?php echo site_url(); ?>">PAcolors</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav">
-							<li <?php if ($active == 'applications') echo "class=\"active\""; ?>><?php echo anchor('applications', 'Applications'); ?></li>
 							<li <?php if ($active == 'colors') echo "class=\"active\""; ?>><?php echo anchor('colors', 'Colors'); ?></li>
+							<li <?php if ($active == 'applications') echo "class=\"active\""; ?>><?php echo anchor('applications', 'Applications'); ?></li>
 							<li><a href="http://www.paranoid-rom.com/">Parandoid Android</a></li>
 						</ul>
 						<ul class="nav pull-right">
