@@ -33,7 +33,7 @@ class Render extends CI_Controller
 	
 	public function preview($id)
 	{
-		$color = $this->color_model->get_setting_by_id($id);
+		$color = $this->color_model->get_setting_by_id(0, $id);
 		if (isset($color))
 		{
 			$this->render($color);

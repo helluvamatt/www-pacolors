@@ -27,8 +27,7 @@ CASE WHEN users.enabled THEN 1 ELSE 0 END AS user_enabled,
 (SELECT count(*) FROM votes WHERE votes.enabled AND votes.colorid = colors.id AND votes.userid = ?) AS user_voted
 FROM colors
 LEFT JOIN applications ON applications.id = colors.appid
-LEFT JOIN users ON users.id = colors.userid
-');
+LEFT JOIN users ON users.id = colors.userid');
 define('SQL_COLORS_DEFAULT_WHERE', 'WHERE colors.enabled AND applications.enabled AND users.enabled');
 define('SQL_COLORS_ORDERBY', 'ORDER BY colors.created, colors.id');
 
@@ -54,7 +53,7 @@ class Color_model extends Db_model
 		return $result->num_rows() > 0 ? $result->row(0, 'Color_Object') : null;
 	}
 
-	public function get_list($userid, $count = 0, $page = 0, $where = SQL_COLORS_DEFAULT_WHERE, $params = array())
+	public function get_list($userid, $count = 0, $page = 0, $where = SQL_COLORS_DEFAULT_WHERE, $parms = array())
 	{
 		$sql = SQL_COLORS . ' ' . $where;
 		$params = array();
@@ -66,7 +65,7 @@ class Color_model extends Db_model
 			$params[] = $page * $count; // OFFSET $page*$count
 		}
 		$sql .= ' ' . SQL_COLORS_ORDERBY;
-		$result = $this->db->query($sql, $params);
+		$result = $this->db->query($sql, array_merge($params, $parms));
 		return $result->result('Color_Object');
 	}
 	
@@ -78,6 +77,11 @@ class Color_model extends Db_model
 	public function get_list_for_user($userid, $id, $count = 0, $page = 0)
 	{
 		return $this->get_list($userid, $count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.userid = ?', array($id));
+	}
+	
+	public function get_list_favorites($userid, $count = 0, $page = 0)
+	{
+		return $this->get_list($userid, $count, $page, SQL_COLORS_DEFAULT_WHERE . ' AND colors.id IN (SELECT votes.colorid FROM votes WHERE votes.enabled AND votes.userid = ? )', array($userid));
 	}
 
 	/* --------------------------------------------------------------------- */
@@ -121,7 +125,7 @@ class Color_model extends Db_model
 	/* --------------------------------------------------------------------- */
 	public function get_manage_list($count = 0, $page = 0)
 	{
-		return $this->get_list($count, $page, '', array());
+		return $this->get_list(0, $count, $page, '', array());
 	}
 	
 	public function toggle_color($id)

@@ -15,9 +15,19 @@ if (isset($color_list) && count($color_list) > 0)
 				<div class="span1" style=" vertical-align: middle; line-height: 48px;">
 					<div style="padding-left: 6px; line-height: 24px; display: inline-block;" id="votes_<?php echo $color->id; ?>">
 						<span><?php echo $color->votes; ?></span>
-<?php if (isset($user)) { ?>
+<?php
+		if (isset($user)) {
+			if (isset($hide_vote_control)) {
+?>
+						<i class="<?php echo $color->user_voted ? "icon-star" : "icon-star-empty"; ?>"></i>
+<?php
+			} else {
+?>
 						<a class="btn btn-mini btn-info <?php if ($color->user_voted) echo "active"; ?>" href="Javascript:;" onclick="cast_vote(<?php echo $color->id; ?>);" title="Vote for this Color Setting"><i class=" icon-white <?php echo $color->user_voted ? "icon-star" : "icon-star-empty"; ?>"></i></a>
-<?php } ?>
+<?php
+			}
+		}
+?>
 					</div>
 				</div>
 				<a class="accordion-toggle pull-left no-underline" title="Click for details." style="vertical-align: middle;" data-toggle="collapse" data-parent="#color_list_accordion" href="#collapse_color_<?php echo $color->id; ?>">

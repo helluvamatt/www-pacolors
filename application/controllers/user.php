@@ -71,13 +71,12 @@ class User extends MY_Controller
 			$page_data['user'] = $this->user_model->get_user($userid);
 		}
 		
-		$this->title = "User Details";
+		$this->title = "My Colors";
 		if (isset($page_data['user']))
 		{
 			$this->load->model('color_model');
-			$this->title .= ' | ' . $page_data['user']->get_display_name();
-			$list_data['color_list'] = $this->color_model->get_list_for_user($userid);
-			$list_data['hide_user_col'] = true;
+			$list_data['color_list'] = $this->color_model->get_list_for_user($this->userid, $userid);
+			$list_data['user'] = $this->user;
 			$page_data['colorsetting_list'] = $this->load_view('colors/table', $list_data);
 			$this->render_page('users/colors', $page_data);
 		}
@@ -87,6 +86,40 @@ class User extends MY_Controller
 			$page_data['error_message'] = "That user was not found in the database.";
 			$this->render_page('error', $page_data);
 		}
+	}
+	
+	public function favorites($id = 0)
+	{
+		// Grab the user ID
+		if ($id == 0)
+		{
+			$userid = $this->userid;
+			$page_data['user'] = $this->user;
+			$this->active = "user.favorites";
+		}
+		else
+		{
+			$userid = $id;
+			$page_data['user'] = $this->user_model->get_user($userid);
+		}
+		
+		$this->title = "My Favorites";
+		if (isset($page_data['user']))
+		{
+			$this->load->model('color_model');
+			$list_data['color_list'] = $this->color_model->get_list_favorites($userid);
+			$list_data['user'] = $this->user;
+			$page_data['colorsetting_list'] = $this->load_view('colors/table', $list_data);
+			$this->render_page('users/colors', $page_data);
+		}
+		else
+		{
+			$page_data['error_title'] = "Invalid User";
+			$page_data['error_message'] = "That user was not found in the database.";
+			$this->render_page('error', $page_data);
+		}
+		
+		
 	}
 	
 }

@@ -59,13 +59,13 @@ if (has_role($role_map, 'sys.manage')):
 							<li class="dropdown<?php if (strpos($active, 'manage') !== false) echo " active"; ?>">
 								<a href="Javascript:;" class="dropdown-toggle" data-toggle="dropdown">Manage&nbsp;<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li <?php if ($active == 'manage.colors') echo "class=\"active\""; ?>><?php echo anchor('manage/colors', 'Manage Colors'); ?></li>
-									<li <?php if ($active == 'manage.applications') echo "class=\"active\""; ?>><?php echo anchor('manage/applications', 'Manage Applications'); ?></li>
+									<li <?php if ($active == 'manage.colors') echo "class=\"active\""; ?>><?php echo anchor('manage/colors', '<i class="icon-tint"></i>&nbsp;Manage Colors'); ?></li>
+									<li <?php if ($active == 'manage.applications') echo "class=\"active\""; ?>><?php echo anchor('manage/applications', '<i class="icon-cog"></i>&nbsp;Manage Applications'); ?></li>
 <?php
 	if (has_role($role_map, 'sys.roles.admin')):
 ?>
 									<li class="divider"></li>
-									<li <?php if ($active == 'manage.users') echo "class=\"active\""; ?>><?php echo anchor('manage/users', 'Manage Users'); ?></li>
+									<li <?php if ($active == 'manage.users') echo "class=\"active\""; ?>><?php echo anchor('manage/users', '<i class="icon-user"></i>&nbsp;Manage Users'); ?></li>
 <?php
 	endif;
 ?>
@@ -81,10 +81,10 @@ if (isset($user) && $user !== FALSE):
 									<span style="padding: 9px 0px; display: inline-block;"><?php echo $user->get_display_name(); ?>&nbsp;<b class="caret"></b></span>
 								</a>
 								<ul class="dropdown-menu">
-									<li <?php if ($active == 'user.colors') echo "class=\"active\""; ?>><?php echo anchor('user/colors', 'My Colors'); ?></li>
-									<li <?php if ($active == 'user.favorites') echo "class=\"active\""; ?>><?php echo anchor('user/favorites', 'My Favorites'); ?></li>
+									<li <?php if ($active == 'user.colors') echo "class=\"active\""; ?>><?php echo anchor('user/colors', '<i class="icon-tint"></i>&nbsp;My Colors'); ?></li>
+									<li <?php if ($active == 'user.favorites') echo "class=\"active\""; ?>><?php echo anchor('user/favorites', '<i class="icon-star"></i>&nbsp;My Favorites'); ?></li>
 									<li class="divider"></li>
-									<li><?php echo anchor('user/logout', 'Log Out'); ?></li>
+									<li><?php echo anchor('user/logout', '<i class="icon-lock"></i>&nbsp;Log Out'); ?></li>
 								</ul>
 							</li>
 <?php
