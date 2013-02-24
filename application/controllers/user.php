@@ -51,9 +51,9 @@ class User extends MY_Controller
 		redirect(site_url());
 	}
 	
-	public function signup($password)
+	public function signup()
 	{
-		if (isset($password)) echo $this->user_model->add_user($password);
+		
 	}
 	
 	public function colors($id = 0)
@@ -118,8 +118,7 @@ class User extends MY_Controller
 			$page_data['error_message'] = "That user was not found in the database.";
 			$this->render_page('error', $page_data);
 		}
-		
-		
+
 	}
 	
 }
