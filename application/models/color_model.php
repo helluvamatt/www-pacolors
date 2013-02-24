@@ -253,6 +253,12 @@ class Color_Object extends DB_Object
 		return $alpha | $red | $green | $blue;
 	}
 	
+	public static function color_to_css($color, $include_alpha = TRUE)
+	{
+		list($alpha, $red, $green, $blue) = Color_Object::components($color);
+		return $include_alpha ? ("rgba(" . $red . "," . $green . "," . $blue . "," . ($alpha / 0xFF) . ")") : sprintf("#%02x%02x%02x", $red, $green, $blue);
+	}
+	
 }
 
 

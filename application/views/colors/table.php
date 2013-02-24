@@ -33,11 +33,11 @@ if (isset($color_list) && count($color_list) > 0)
 				<a class="accordion-toggle pull-left no-underline" title="Click for details." style="vertical-align: middle;" data-toggle="collapse" data-parent="#color_list_accordion" href="#collapse_color_<?php echo $color->id; ?>">
 					<span><?php printf("#%u", $color->id); ?></span>
 					<!-- Color Controls -->
-					<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_bg()); ?>" alt="Navbar Background" title="Navbar Background">
-					<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_fg()); ?>" alt="Navbar Buttons" title="Navbar Buttons">
-					<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_navbar_gl()); ?>" alt="Navbar Glow" title="Navbar Glow">
-					<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_bg()); ?>" alt="Status Bar Background" title="Status Bar Background">
-					<img class="color-control" src="<?php echo site_url('render/color/' . $color->get_color_status_fg()); ?>" alt="Status Bar Foreground" title="Status Bar Foreground">
+					<div class="color-control-container"><div class="color-control-background">&nbsp;</div><div class="color-control" style="background-color: <?php echo Color_Object::color_to_css($color->get_color_navbar_bg()); ?>;" title="Navbar Background">&nbsp;</div></div>
+					<div class="color-control-container"><div class="color-control-background">&nbsp;</div><div class="color-control" style="background-color: <?php echo Color_Object::color_to_css($color->get_color_navbar_fg()); ?>;" title="Navbar Background">&nbsp;</div></div>
+					<div class="color-control-container"><div class="color-control-background">&nbsp;</div><div class="color-control" style="background-color: <?php echo Color_Object::color_to_css($color->get_color_navbar_gl()); ?>;" title="Navbar Background">&nbsp;</div></div>
+					<div class="color-control-container"><div class="color-control-background">&nbsp;</div><div class="color-control" style="background-color: <?php echo Color_Object::color_to_css($color->get_color_status_bg()); ?>;" title="Navbar Background">&nbsp;</div></div>
+					<div class="color-control-container"><div class="color-control-background">&nbsp;</div><div class="color-control" style="background-color: <?php echo Color_Object::color_to_css($color->get_color_status_fg()); ?>;" title="Navbar Background">&nbsp;</div></div>
 					<!-- Suggested Application -->
 					<span><?php echo $color->app_name; ?></span>
 				</a>
