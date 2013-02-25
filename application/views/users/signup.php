@@ -41,6 +41,12 @@
 			<span class="help-inline">*</span>
 		</div>
 	</div>
+	<div class="control-group">
+		<label class="control-label">Password Strength</label>
+		<div class="controls">
+			<div id="passwordStrengthField" style="width: 450px;"></div>
+		</div>
+	</div>
 	<div class="control-group<?php if (form_error('password_2') != "") {echo " error";} ?>">
 		<label class="control-label" for="inputPassword_2">Confirm Password</label>
 		<div class="controls controls-row">
@@ -53,3 +59,9 @@
 		<a href="<?php echo site_url(); ?>" class="btn">Cancel</a>
 	</div>
 </form>
+<script type="text/javascript" src="<?php echo base_url('assets/js/password-meter.js'); ?>"></script>
+<script type="text/javascript">
+$('#inputPassword_1').passwordMeter({
+	renderTarget: '#passwordStrengthField'
+});
+</script>
